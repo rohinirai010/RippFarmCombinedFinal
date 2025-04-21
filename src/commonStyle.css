@@ -1,0 +1,206 @@
+.title-glow {
+    background: linear-gradient(to right, #9d6ee2, #7fbfff, #f8eddc);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: gradient-shift 3s ease infinite;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+   
+    position: relative;
+  }
+  
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  @keyframes shine-effect {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+ 
+  @keyframes shine {
+    0% { transform: translateX(-100%); }
+    20% { transform: translateX(100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Star twinkling animation */
+  .star {
+    animation: twinkle 2s infinite alternate;
+    filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.7));
+  }
+
+  .star:nth-child(1) { animation-delay: 0s; }
+  .star:nth-child(2) { animation-delay: 0.3s; }
+  .star:nth-child(3) { animation-delay: 0.6s; }
+
+  @keyframes twinkle {
+    0% { opacity: 0.4; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0.7; transform: scale(1); }
+  }
+  
+  /* Eye icon glow */
+  .eye-icon {
+    filter: drop-shadow(0 0 3px rgba(121, 155, 255, 0.7));
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .eye-icon:hover {
+    filter: drop-shadow(0 0 5px rgba(121, 155, 255, 1));
+  }
+  
+  /* Button glow effect */
+  .button-glow {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to right, #4338ca, #3b82f6);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.1), 
+                0 0 20px rgba(59, 130, 246, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .button-glow:hover {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3), 
+                0 0 30px rgba(59, 130, 246, 0.2);
+    transform: translateY(-1px);
+  }
+  
+  .button-glow:disabled {
+    background: linear-gradient(to right, #3c3d5e, #5a6986);
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  
+  .button-glow::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: button-shine 3s infinite;
+  }
+  
+  @keyframes button-shine {
+    0% { transform: rotate(30deg) translateX(-300%); }
+    100% { transform: rotate(30deg) translateX(300%); }
+  }
+  
+  /* Logo glow effect */
+  .logo-glow {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5),
+                0 0 30px rgba(59, 130, 246, 0.3);
+    animation: logo-pulse 2s infinite alternate;
+  }
+  
+  @keyframes logo-pulse {
+    0% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(59, 130, 246, 0.3); }
+    100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.7), 0 0 40px rgba(59, 130, 246, 0.5); }
+  }
+  
+  @keyframes border-shine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Input field focused state */
+  .input-field:focus {
+    border-color: #051357; 
+    outline: none; 
+    box-shadow: 0 -2px 3px rgba(0, 102, 255, 0.8); 
+  }
+  
+  /* Error text styling */
+  .error-text {
+    color: #ff4e6a;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    font-size: 12px;
+    margin-left: 1rem;
+    position: absolute;
+  }
+  
+  /* Error input styling */
+  .input-error {
+    border-color: #ff4e6a !important;
+    box-shadow: 0 0 0 1px rgba(255, 78, 106, 0.2) !important;
+  }
+  
+
+
+  .react-tel-input .selected-flag:hover, .react-tel-input .selected-flag:focus {
+    background-color: transparent;
+}
+
+.react-tel-input .flag-dropdown.open .selected-flag {
+  background: transparent;
+}
+
+.react-tel-input .country-list .search {
+  position: sticky;
+  top: 0;
+  background-color: #000000;
+  padding: 10px 0 6px 10px;
+}
+
+.react-tel-input .country-list .country.highlight {
+  background-color: rgba(46, 46, 46, 0.884);
+}
+
+.react-tel-input .country-list .country:hover {
+  background-color: rgb(19, 19, 19);
+}
+
+.react-tel-input .country-list {
+  width: 220px;
+  margin-top: 0 !important;
+}
+
+
+.react-tel-input .selected-flag {
+  outline: none;
+  position: relative;
+  width: 38px;
+  height: 100%;
+  margin-bottom: 8px;
+  border-radius: 3px 0 0 3px;
+}
+
+.flag-dropdown{
+  height:3rem;
+}
+
+
+.withdraw-input{
+  border: none;
+  border-color: none;
+  
+}
+
+.withdraw-input:focus{
+  border: none;
+  border-color: none;
+  --tw-ring-color: none; 
+}
+
+
+textarea, select:focus {
+       --tw-ring-color: none; 
+  }
+
+
