@@ -181,7 +181,7 @@ const WithdrawalPage = () => {
           </div>
         </div>
       </motion.header>
-      <div className="flex flex-col items-center text-white px-3 sm:px-6 pt-8 pb-28 sm:pb-8">
+      <div className="flex flex-col items-center text-white px-3 sm:px-6 pt-8 sm:pb-8">
         {/* Address Addition Box */}
         <div className="w-full bg-[#1e2938]/50 border border-[#3f89e2] rounded-2xl p-3 sm:p-6 mb-6">
           <div className="flex items-center justify-between mb-3">
@@ -234,7 +234,7 @@ const WithdrawalPage = () => {
         </div>
 
         {!addresses.usdt?.isVerified && !addresses.xrp?.isVerified ? (
-          <div className="hidden">
+          <div className="hidden w-full h-screen">
               {/* Wallet Selection */}
               <div className="w-full mb-6">
               <h2 className="text-base tracking-wide text-gray-300 mb-3">
