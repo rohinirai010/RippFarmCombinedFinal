@@ -183,7 +183,7 @@ const WithdrawalPage = () => {
       </motion.header>
       <div className="flex flex-col items-center text-white px-3 sm:px-6 pt-8 sm:pb-8 h-full">
         {/* Address Addition Box */}
-        <div className="w-full bg-[#1e2938]/50 border border-[#3f89e2] rounded-2xl p-3 sm:p-6 mb-6">
+        <div className="w-full h-full bg-[#1e2938]/50 border border-[#3f89e2] rounded-2xl p-3 sm:p-6 mb-6">
           <div className="flex items-center justify-between mb-3">
             <div>
               {/* Check if user exists before accessing properties */}
