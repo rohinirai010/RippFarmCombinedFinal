@@ -186,7 +186,7 @@ export default function Dashboard() {
   // Check if user is not authenticated or still loading
   if (isLoading || !isAuthenticated) {
     return (
-      <div className="max-w-lg mx-auto flex flex-col h-screen bg-gradient-to-b from-[#1d1e35] via-[#1d1e35] to-[#7789e5] text-white justify-center items-center">
+      <div className="max-w-xl mx-auto flex flex-col h-screen bg-gradient-to-b from-[#1d1e35] via-[#1d1e35] to-[#7789e5] text-white justify-center items-center">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -264,10 +264,11 @@ export default function Dashboard() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleLogout}
-                className="flex items-center px-4 py-2 rounded-full bg-[#5563c8] hover:bg-[#4351b4] text-white font-medium text-sm transition-colors"
+                title="Logout"
+                className="flex items-center px-4 py-2 rounded-full bg-[#5563c8] hover:bg-[#4351b4] text-white font-medium text-sm transition-colors cursor-pointer"
               >
                 <LogOut size={16} className="mr-1" />
-                Logout
+           
               </motion.button>
             </div>
           </div>
@@ -344,7 +345,7 @@ export default function Dashboard() {
           >
             <div className="flex justify-between items-center mb-3">
               <p className="text-base text-gray-300">Activities & Earnings</p>
-              <ViewAllButton label="See All" navigateTo="/user/transactions" />
+              {/* <ViewAllButton label="See All" navigateTo="/user/transactions" /> */}
             </div>
             <div className="grid grid-cols-2 gap-2 sm:gap-4">
               {activities.map((item, index) => (

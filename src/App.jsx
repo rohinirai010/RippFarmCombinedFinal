@@ -61,6 +61,10 @@ import AddressDetailPage from "./pages/Account/AccountPrivileges/AddressDetailPa
 import MyNetwork from "./pages/Account/Reports/MyNetwork.jsx";
 import MyHistory from "./pages/Account/Reports/MyHistory.jsx";
 import CappingDetailPage from "./pages/Account/Capping/CappingDetailPage.jsx";
+import BLBPage from "./pages/Account/BlbBonus/BlbPage.jsx";
+import FaqPage from "./pages/Account/HelpCenter/FaqPage.jsx";
+import OdlSetting from "./pages/AdminPages/Settings/OdlSetting.jsx";
+import LevelSetting from "./pages/AdminPages/Settings/LevelSetting.jsx";
 
 function App() {
   const location = useLocation();
@@ -154,6 +158,12 @@ function App() {
             element={<MyEarningReportPage />}
           />
 
+<Route
+            path="/user/account/blb-bonus"
+            element={<BLBPage />}
+          />
+          
+
           {/* User Panel accounts --> transaction section routes */}
           <Route
             path="/user/transaction/transaction-report"
@@ -172,8 +182,9 @@ function App() {
             element={<ReferralLink />}
           />
 
-          {/* User Panel accounts --> Referral Program section routes */}
+          {/* User Panel accounts --> Referral Program section and help center routes */}
           <Route path="/user/account/helpdesk" element={<Helpdesk />} />
+          <Route path="/user/account/faq" element={<FaqPage />} />
 
           <Route path="/user/deposit" element={<DepositFlow />} />
           <Route path="/user/odl" element={<ODLClaimPage />} />
@@ -228,6 +239,16 @@ function App() {
             exact
             path="/anjo/special-reward"
             element={<SpecialReward />}
+          />
+           <Route
+            exact
+            path="/anjo/odl-setting"
+            element={<OdlSetting />}
+          />
+           <Route
+            exact
+            path="/anjo/level-setting"
+            element={<LevelSetting />}
           />
         </Routes>
       )}

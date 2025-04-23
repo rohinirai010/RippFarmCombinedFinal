@@ -21,6 +21,7 @@ import {
 } from "react-icons/bi";
 import { TbReport } from "react-icons/tb";
 import { useSelector } from "react-redux";
+import { Settings } from "lucide-react";
 
 // Define navigation items structure for reusability
 const navItems = [
@@ -92,6 +93,17 @@ const navItems = [
       { title: "Special Reward", path: "/anjo/special-reward" },
     ],
   },
+  {
+    id: "setting",
+    title: "Settings",
+    icon: <Settings className="w-5 h-5" />,
+    hasDropdown: true,
+    children: [
+      { title: "ODL Setting", path: "/anjo/odl-setting" },
+      { title: "Level Setting", path: "/anjo/level-setting" },
+    ],
+  },
+  
 ];
 
 function Sidebar({

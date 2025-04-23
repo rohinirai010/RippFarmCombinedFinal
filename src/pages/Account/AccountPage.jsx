@@ -339,7 +339,7 @@ const AccountPage = () => {
             <MenuCard
               icon={GiTakeMyMoney}
               label="BLB Bonus"
-              onClick={() => navigate("/user/report/blb-bonus")}
+              onClick={() => navigate("/user/account/blb-bonus")}
             />
             <MenuCard
               icon={FaMoneyBillWave}
@@ -428,7 +428,7 @@ const AccountPage = () => {
             <MenuCard
               icon={MdHelpOutline}
               label="FAQ"
-              onClick={() => navigate("/faq")}
+              onClick={() => navigate("/user/account/faq")}
             />
             <SpecialMenuCard
               icon={AiOutlineLogout}
@@ -440,7 +440,7 @@ const AccountPage = () => {
         </div>
 
         {/* About Section */}
-        <AboutLink onClick={() => navigate("/about-rippfarm")} />
+        <AboutLink  />
       </div>
 
       {/* ReferralLink component */}
@@ -464,3 +464,4 @@ const AccountPage = () => {
 };
 
 export default AccountPage;
+

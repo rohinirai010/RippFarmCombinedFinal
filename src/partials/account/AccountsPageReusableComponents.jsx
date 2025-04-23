@@ -1,5 +1,7 @@
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { MdOutlineArrowForwardIos } from "react-icons/md";
+import { MdOutlineArrowForwardIos,MdKeyboardArrowDown } from "react-icons/md";
+
 
 // Active Plans List Component
 export const ActivePlansList = ({ activatedPackages }) => {
@@ -138,44 +140,125 @@ export const ActivePlansList = ({ activatedPackages }) => {
     </motion.section>
   );
   
- export const AboutLink = ({ onClick }) => (
-    <motion.div
-      onClick={onClick}
-      className="bg-gradient-to-r from-[#061758]/90 to-[#0e1738]/90 backdrop-blur-md p-4 rounded-xl flex justify-between items-center cursor-pointer shadow-lg border border-blue-400/20"
-      whileHover={{
-        scale: 1.02,
-        boxShadow: "0 10px 25px -5px rgba(59,130,246,0.3)",
-        borderColor: "rgba(96, 165, 250, 0.5)",
-      }}
-      whileTap={{ scale: 0.98 }}
-    >
-      <div className="flex items-center">
-        <div className="bg-[#070d25]/80 p-2 rounded-lg mr-3 border border-blue-500/20">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-blue-400"
-          >
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="16" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-          </svg>
-        </div>
-        <span className="font-bold text-blue-100">About RippFarm</span>
-      </div>
   
-      <motion.div
-        className="bg-[#070d25]/80 p-2 rounded-lg border border-blue-500/20"
-        whileHover={{ x: 4 }}
-      >
-        <MdOutlineArrowForwardIos className="text-blue-400" />
-      </motion.div>
-    </motion.div>
-  );
+  
+  export const AboutLink = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    
+    const toggleAccordion = () => {
+      setIsOpen(!isOpen);
+    };
+  
+    const rippFarmPoints = [
+      {
+        title: "Decentralized Trading",
+        description: "RippFarm utilizes cutting-edge blockchain technology to provide secure and transparent decentralized trading solutions."
+      },
+      {
+        title: "Automated Bot Systems",
+        description: "Our AI-powered trading bots help maximize your investments with minimal effort through sophisticated algorithms."
+      },
+      {
+        title: "Multi-level Rewards",
+        description: "Benefit from our comprehensive referral system with multiple tiers of rewards and bonuses."
+      },
+      {
+        title: "Secure Infrastructure",
+        description: "End-to-end encryption and advanced security protocols ensure your assets remain protected at all times."
+      },
+      {
+        title: "Global Community",
+        description: "Join thousands of traders worldwide who trust RippFarm for their automated trading needs."
+      }
+    ];
+  
+    return (
+      <div className="mb-6">
+        <motion.div
+          onClick={toggleAccordion}
+          className="bg-gradient-to-r from-[#061758]/90 to-[#0e1738]/90 backdrop-blur-md p-4 rounded-xl flex justify-between items-center cursor-pointer shadow-lg border border-blue-400/20"
+          whileHover={{
+            scale: 1.02,
+            boxShadow: "0 10px 25px -5px rgba(59,130,246,0.3)",
+            borderColor: "rgba(96, 165, 250, 0.5)",
+          }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="flex items-center">
+            <div className="bg-[#070d25]/80 p-2 rounded-lg mr-3 border border-blue-500/20">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-blue-400"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            </div>
+            <span className="font-bold text-blue-100">About RippFarm</span>
+          </div>
+  
+          <motion.div
+            className="bg-[#070d25]/80 p-2 rounded-lg border border-blue-500/20"
+            animate={{ rotate: isOpen ? 0 : 0 }}
+          >
+            {isOpen ? 
+              <MdKeyboardArrowDown className="text-blue-400" /> : 
+              <MdOutlineArrowForwardIos className="text-blue-400" />}
+          </motion.div>
+        </motion.div>
+  
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <div className="mt-2 bg-[#0a112d] border border-blue-500/20 rounded-xl p-2 sm:p-4 shadow-inner shadow-blue-900/20">
+                <h3 className="text-blue-300 font-medium text-center mb-3">About Our Platform</h3>
+                
+                <div className="space-y-3">
+                  {rippFarmPoints.map((point, index) => (
+                    <motion.div 
+                      key={index}
+                      className="flex items-start border-b border-blue-500/10 pb-2 last:border-b-0"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <div className="bg-blue-500/20 rounded-full w-10 sm:w-8 h-5 sm:h-6 flex items-center justify-center mr-1 mt-0.5 text-xs font-bold text-blue-300">
+                        {index + 1}
+                      </div>
+                      <div>
+                        <h4 className="text-blue-200 font-medium">{point.title}</h4>
+                        <p className="text-blue-100/70 text-[13px]  sm:text-sm">{point.description}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+                
+                <div className="mt-4 bg-[#061242] p-3 rounded-lg border border-blue-600/20">
+                  <p className="text-blue-100/80 text-sm text-center">
+                    RippFarm is committed to providing innovative 
+                    blockchain-based financial solutions for traders worldwide.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
+  

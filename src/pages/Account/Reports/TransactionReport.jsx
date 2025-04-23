@@ -10,93 +10,8 @@ import Footer from '../../../partials/Footer';
 import { MdClose } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import headerLogo from "../../../images/sidebarLogoCollapsed.png";
-import {DatePicker, Dropdown, SearchInput, DataTable } from "../../../partials/account/ReportsReusableComponents";
+import {DatePicker, Dropdown, SearchInput, DataTable, BackgroundEffect, exportData as exportDataUtil } from "../../../partials/account/ReportsReusableComponents";
 
-// Background effect component
-const BackgroundEffect = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-    {/* Dynamic grid patterns */}
-    <div className="absolute inset-0 opacity-5">
-      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#3b82f6" strokeWidth="0.5" strokeOpacity="0.3"/>
-          </pattern>
-          <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-            <rect width="80" height="80" fill="url(#smallGrid)"/>
-            <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#3b82f6" strokeWidth="1" strokeOpacity="0.5"/>
-          </pattern>
-          <radialGradient id="sphereGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-            <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.1"/>
-            <stop offset="100%" stopColor="#60a5fa" stopOpacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-        <circle cx="20%" cy="80%" r="100" fill="url(#sphereGradient)" />
-        <circle cx="85%" cy="20%" r="120" fill="url(#sphereGradient)" />
-      </svg>
-    </div>
-    
-    {/* Animated data streams */}
-    {[...Array(5)].map((_, i) => (
-      <div key={i} className={`absolute h-full w-0.5 opacity-10 left-${Math.floor(Math.random() * 100)}%`}>
-        <motion.div 
-          className="w-full h-20 bg-gradient-to-b from-transparent via-blue-500 to-transparent"
-          animate={{ y: [-100, 1000] }}
-          transition={{ 
-            duration: 5 + Math.random() * 7, 
-            repeat: Infinity, 
-            repeatType: "loop", 
-            ease: "linear", 
-            delay: Math.random() * 5 
-          }}
-        />
-      </div>
-    ))}
-    
-    {/* Animated particles */}
-    {[...Array(10)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute w-1 h-1 rounded-full bg-blue-400"
-        initial={{ 
-          x: Math.random() * 100 + '%', 
-          y: Math.random() * 100 + '%', 
-          opacity: 0.2 + Math.random() * 0.3 
-        }}
-        animate={{ 
-          x: Math.random() * 100 + '%', 
-          y: Math.random() * 100 + '%',
-          opacity: [0.2, 0.5, 0.2]
-        }}
-        transition={{ 
-          duration: 10 + Math.random() * 20, 
-          repeat: Infinity, 
-          repeatType: "reverse" 
-        }}
-      />
-    ))}
-    
-    {/* Glowing orbs */}
-    <motion.div 
-      className="absolute bottom-20 right-8 w-32 h-32 rounded-full bg-gradient-to-br from-blue-700/10 to-purple-700/5 blur-xl"
-      animate={{ 
-        scale: [1, 1.2, 1], 
-        opacity: [0.1, 0.2, 0.1]
-      }}
-      transition={{ duration: 8, repeat: Infinity }}
-    />
-    
-    <motion.div 
-      className="absolute top-40 left-5 w-24 h-24 rounded-full bg-gradient-to-tr from-blue-500/10 to-cyan-500/5 blur-xl"
-      animate={{ 
-        scale: [1, 1.15, 1], 
-        opacity: [0.1, 0.15, 0.1]
-      }}
-      transition={{ duration: 6, repeat: Infinity, delay: 2 }}
-    />
-  </div>
-);
   
 // Transaction Report Page Component
 const TransactionReport = () => {
@@ -324,6 +239,16 @@ const TransactionReport = () => {
   useEffect(() => {
     filterAndSortData();
   }, []);
+
+    // Handle export functionality
+        const handleExport = (format, dataToExport) => {
+          const formattedData = dataToExport.map((item) => ({
+            ...item,
+            date: new Date(item.date).toLocaleString(),
+          }));
+      
+          exportDataUtil(formattedData, format, "transaction-report");
+        };
   
   return (
     <motion.div 
@@ -525,6 +450,7 @@ const TransactionReport = () => {
           onPageChange={setCurrentPage}
           onSortChange={handleSortChange}
           sortConfig={sortConfig}
+          onExport={handleExport}
         />
       </div>
       

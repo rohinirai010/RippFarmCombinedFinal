@@ -47,25 +47,32 @@ export const PackageCard = ({
   activeCount,
   totalSlots = 8,
   index,
-  link
+  link,
+  isDisabled
 }) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    console.log("Navigating to:", link); // Add this logging to debug
+    if (isDisabled) return; // Prevent click when disabled
+    console.log("Navigating to:", link);
     navigate(link);
   };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
-      whileHover={{ scale: 1, y: -5 }}
-      className="p-1 rounded-xl relative cursor-pointer"
+      whileHover={{ scale: isDisabled ? 1 : 1.02, y: isDisabled ? 0 : -5 }}
+      className={`p-1 rounded-xl relative ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
       onClick={handleCardClick}
     >
-      
-      <div className="p-1 rounded-xl relative">
+      <div className={`p-1 rounded-xl relative ${isDisabled ? 'opacity-50 filter blur-[1px]' : ''}`}>
+        {isDisabled && (
+          <div className="absolute inset-0 flex items-center justify-center z-10 bg-black bg-opacity-20 rounded-xl">
+            <Lock size={24} className="text-white opacity-70" />
+          </div>
+        )}
         <div className="absolute inset-x-0 top-0 p-2 bg-gradient-to-b from-[#1f2984] via-[#5569c1] to-blue-300 rounded-2xl border-b-7 border-[#fdffff]">
           <div className="flex items-center mb-1">
             {icon}

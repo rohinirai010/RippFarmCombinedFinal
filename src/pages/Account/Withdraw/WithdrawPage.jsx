@@ -164,7 +164,7 @@ const WithdrawalPage = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto h-screen bg-gradient-to-b from-[#000621] via-[#0a0e2e] to-[#141539]">
+    <div className="max-w-xl mx-auto h-full bg-gradient-to-b from-[#000621] via-[#0a0e2e] to-[#141539]">
       {/* Header */}
       <motion.header className="top-0 left-0 z-30 transition-all duration-300">
         <div className="px-4 pt-6 flex justify-between items-center">
@@ -181,7 +181,7 @@ const WithdrawalPage = () => {
           </div>
         </div>
       </motion.header>
-      <div className="flex flex-col items-center text-white px-3 sm:px-6 pt-8 pb-28 sm:pb-32">
+      <div className="flex flex-col items-center text-white px-3 sm:px-6 pt-8 pb-28 sm:pb-8">
         {/* Address Addition Box */}
         <div className="w-full bg-[#1e2938]/50 border border-[#3f89e2] rounded-2xl p-3 sm:p-6 mb-6">
           <div className="flex items-center justify-between mb-3">
@@ -397,7 +397,7 @@ const WithdrawalPage = () => {
             {/* Withdraw Button */}
             <button
               onClick={handleWithdraw}
-              className={`px-8 sm:px-14 py-3 sm:py-4 rounded-3xl text-base sm:text-lg tracking-wide font-bold ${
+              className={`px-8 sm:px-14 py-3 sm:py-4 rounded-3xl text-base sm:text-lg tracking-wide font-bold flex items-center justify-center ${
                 parseFloat(withdrawalAmount) >= 10 &&
                 addresses[withdrawalCurrency]?.isVerified
                   ? "bg-blue-500 hover:bg-blue-600"
@@ -414,7 +414,7 @@ const WithdrawalPage = () => {
             </button>
           </div>
         ) : (
-          <div className="block">
+          <div className="block w-full h-screen">
             {/* Wallet Selection */}
             <div className="w-full mb-6">
               <h2 className="text-base tracking-wide text-gray-300 mb-3">
@@ -575,12 +575,14 @@ const WithdrawalPage = () => {
             </div>
 
             {/* Withdraw Button */}
+            <div className="flex items-center justify-center">
+
             <button
               onClick={handleWithdraw}
               className={`px-8 sm:px-14 py-3 sm:py-4 rounded-3xl text-base sm:text-lg tracking-wide font-bold ${
                 parseFloat(withdrawalAmount) >= 10 &&
                 addresses[withdrawalCurrency]?.isVerified
-                  ? "bg-blue-500 hover:bg-blue-600"
+                  ? "bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-2xl font-bold button-glow shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
                   : "bg-gray-700 cursor-not-allowed"
               }`}
               disabled={
@@ -592,12 +594,13 @@ const WithdrawalPage = () => {
                 ? `WITHDRAW $${parseFloat(withdrawalAmount).toLocaleString()}`
                 : "WITHDRAW"}
             </button>
+            </div>
           </div>
         )}
 
         {/* Success Message */}
         {successMessage && (
-          <div className="fixed top-5 right-5 bg-green-600 p-4 rounded-md shadow-lg">
+          <div className="fixed max-w-md mx-auto top-12 bg-green-600 p-4 rounded-md shadow-lg">
             {successMessage}
           </div>
         )}
