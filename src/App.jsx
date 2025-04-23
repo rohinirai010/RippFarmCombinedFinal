@@ -54,7 +54,7 @@ import AdminLogin from "./pages/AdminPages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminPages/AdminDashboard.jsx";
 import ReferralLink from "./pages/Account/ReferralProgram/ReferralLink.jsx";
 import AccountInfo from "./pages/Account/AccountPrivileges/AccountInfo.jsx";
-import AccountChangePassword from "./pages/Account/AccountPrivileges/accountChangePassword.jsx";
+import AccountChangePassword from "./pages/Account/AccountPrivileges/AccountChangePassword.jsx";
 import WithdrawPage from "./pages/Account/Withdraw/WithdrawPage.jsx";
 import Helpdesk from "./pages/Account/HelpCenter/Helpdesk.jsx";
 import AddressDetailPage from "./pages/Account/AccountPrivileges/AddressDetailPage.jsx";
