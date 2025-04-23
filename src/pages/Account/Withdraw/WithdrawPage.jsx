@@ -600,16 +600,16 @@ const WithdrawalPage = () => {
 
         {/* Success Message */}
         {successMessage && (
-          <div className="fixed max-w-md mx-auto top-12 bg-green-600 p-4 rounded-md shadow-lg">
+          <div className="fixed max-w-md mx-auto top-12 bg-green-600 p-4 rounded-md shadow-lg ml-4 mr-4">
             {successMessage}
           </div>
         )}
       </div>
 
       {/* Footer */}
-      <motion.div className="z-10 max-w-xl mx-auto">
+    
         <Footer activeTab={activeTab} setActiveTab={setActiveTab} />
-      </motion.div>
+   
     </div>
   );
 };
