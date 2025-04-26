@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { TerminalSquare } from "lucide-react";
-import { FaLongArrowAltRight } from "react-icons/fa";
 import { loadUser } from "../ReduxStateManagement/slices/authSlice";
 import welcomePageLogo from "../images/mainLogo.png";
-import { LoadingScreen } from "../partials/package/ReusablePackageComponent";
 import {
   AnimatedStar,
   DataStream,

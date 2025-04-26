@@ -132,12 +132,7 @@ const LevelSetting = () => {
               </div>
               
               <div className="p-4 text-white">
-                <div className="mb-4">
-                  <p className="mb-1">Daily XRP Bounty 0.3%</p>
-                  <p className="mb-1">ODL Profit upto 20%</p>
-                  <p className="mb-1">Direct Ripple Bounty 5%</p>
-                </div>
-                
+               
                 <div>
                   <p className="font-semibold mb-2">User Network Bounty</p>
                   <div className="space-y-2">
@@ -171,11 +166,6 @@ const LevelSetting = () => {
               </div>
               
               <div className="p-4 text-white">
-                <div className="mb-4">
-                  <p className="mb-1">Daily XRP Bounty 0.4%</p>
-                  <p className="mb-1">ODL Profit upto 30%</p>
-                  <p className="mb-1">Direct Ripple Bounty 7%</p>
-                </div>
                 
                 <div>
                   <p className="font-semibold mb-2">User Network Bounty</p>
@@ -210,12 +200,7 @@ const LevelSetting = () => {
               </div>
               
               <div className="p-4 text-white">
-                <div className="mb-4">
-                  <p className="mb-1">Daily XRP Bounty 0.5%</p>
-                  <p className="mb-1">ODL Profit upto 50%</p>
-                  <p className="mb-1">Direct Ripple Bounty 10%</p>
-                </div>
-                
+               
                 <div>
                   <p className="font-semibold mb-2">User Network Bounty</p>
                   <div className="grid grid-cols-2 gap-2">

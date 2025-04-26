@@ -74,8 +74,8 @@ const CommonTable = ({
               { key: 'mobileNumber', label: 'Mobile Number' },
               { key: 'activationDate', label: 'Activation Date' },
               { key: 'registrationDate', label: 'Registration' },
-              { key: 'kycStatus', label: 'KYC Status' },
-              { key: 'bankStatus', label: 'Bank Status' },
+              // { key: 'kycStatus', label: 'KYC Status' },
+              // { key: 'bankStatus', label: 'Bank Status' },
               { key: 'userStatus', label: 'User Status' }
             ].map((header) => (
               <th
@@ -169,9 +169,9 @@ const CommonTable = ({
               <td className="px-2 py-[9px] whitespace-nowrap">{row.mobileNumber}</td>
               <td className="px-2 py-[9px] whitespace-nowrap">{row.activationDate}</td>
               <td className="px-2 py-[9px] whitespace-nowrap">{row.registrationDate}</td>
-              <td className="px-2 py-[9px] whitespace-nowrap">
+              <td className="hidden px-2 py-[9px] whitespace-nowrap">
                 <span
-                  className={`px-2 py-[2px] rounded-full text-xs ${
+                  className={` px-2 py-[2px] rounded-full text-xs ${
                     row.kycStatus === "Verified"
                       ? "bg-green-100 text-green-800"
                       : "bg-red-200 text-red-800"
@@ -180,7 +180,7 @@ const CommonTable = ({
                   {row.kycStatus}
                 </span>
               </td>
-              <td className="px-2 py-[9px] whitespace-nowrap">
+              <td className="hidden px-2 py-[9px] whitespace-nowrap">
                 <span
                   className={`px-2 py-[2px] rounded-full text-xs ${
                     row.bankStatus === "Verified"

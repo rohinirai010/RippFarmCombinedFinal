@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import bgImg from "../../images/dashboardBgImg.png";
 import { useState } from "react";
+import { SiWhatsapp } from "react-icons/si";
+import { useSelector } from "react-redux";
 
 
 export const ActivityItem = ({ icon, title, amount, time, index }) => {
@@ -302,13 +304,13 @@ export const WalletCard = ({
     if (title === "Deposit Wallet") {
       navigate('/user/deposit');
     } else if (title === "Earning Wallet") {
-      navigate('/user/earnings');
+      navigate('/user/report/my-earning');
     }
   };
 
   const handleSecondaryAction = () => {
     if (secondButtonText === "Withdraw") {
-      navigate('/user/withdraw');
+      navigate('/user/account/withdraw');
     } else if (secondButtonText === "Transfer") {
       // Handle transfer action
     }
@@ -432,8 +434,8 @@ export const SocialCard = ({ title, icon, color, buttonText = "Connect" }) => {
   const navigate = useNavigate();
   
   const bgColors = {
-    green: "bg-green-500 dark:bg-green-600",
-    blue: "bg-blue-500 dark:bg-blue-600",
+    green: "bg-green-500 dark:bg-green-600/60",
+    blue: "bg-blue-500 dark:bg-blue-600/50",
     purple: "bg-purple-600 dark:bg-purple-700",
   };
 
@@ -464,23 +466,23 @@ export const SocialCard = ({ title, icon, color, buttonText = "Connect" }) => {
   };
 
   return (
-    <div className="bg-gray-800 dark:bg-gray-700 rounded-lg overflow-hidden">
-      <div className="p-3">
+    <div className="bg-gray-800 dark:bg-gray-700/20 border border-gray-600 rounded-lg overflow-hidden">
+      <div className="p-2 flex flex-col items-center">
         <div
-          className={`${bgColors[color]} w-10 h-10 rounded-full flex items-center justify-center text-white mx-auto mb-2 cursor-pointer`}
+          className={`${bgColors[color]} w-8 h-8 rounded-full flex items-center justify-center text-white mx-auto mb-1 cursor-pointer`}
           onClick={handleSocialConnect}
         >
           {icon}
         </div>
-        <h3 className="text-white dark:text-gray-200 text-sm font-medium text-center mb-2">
+        <h3 className="text-white dark:text-gray-200 text-sm font-medium text-center mb-1">
           {title}
         </h3>
 
         <button
           onClick={handleSocialConnect}
-          className={`w-full bg-gradient-to-r ${buttonGradients[color]} text-white py-1 px-2 rounded-2xl text-xs font-medium transform transition-all duration-300 cursor-pointer ${hoverEffects[color]} hover:-translate-y-0.5 flex items-center justify-center gap-1`}
+          className={` bg-gradient-to-r ${buttonGradients[color]} text-white py-0.5  px-3 rounded-3xl text-xs font-medium transform transition-all duration-300 cursor-pointer ${hoverEffects[color]} hover:-translate-y-0.5 flex items-center justify-center gap-1`}
         >
-          <span>{buttonText}</span>
+          <span className="text-sm font-medium">{buttonText}</span>
           <svg
             className="w-3 h-3"
             fill="none"
@@ -519,6 +521,8 @@ export const ViewAllButton = ({ label, navigateTo }) => {
   );
 };
 
+
+
 export const TeamDistributionFilter = ({ onFilterChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("Last 30 days");
@@ -535,10 +539,10 @@ export const TeamDistributionFilter = ({ onFilterChange }) => {
   return (
     <div className="relative">
       <div 
-        className="flex items-center text-xs bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        className="flex items-center text-sm bg-gray-100 dark:bg-gray-800 px-2 sm:px-6 py-1 sm:py-2 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="mr-2 text-gray-700 dark:text-gray-300">
+        <span className="mr-1 text-[12px] sm:text-[14px] text-gray-700 dark:text-gray-300">
           {selected}
         </span>
         <ChevronDown
@@ -569,9 +573,19 @@ export const TeamDistributionFilter = ({ onFilterChange }) => {
 export const TradingSummaryItem = ({ title, value, subtitle, icon, trend, navigateTo }) => {
   const navigate = useNavigate();
   
+  // Determine if value needs USDT label (only add for currency values)
+  const needsCurrencyLabel = title.includes("Earnings") || 
+                            title.includes("Balance") || 
+                            title.includes("Withdrawn");
+  
+  // Handle percentage values (for Capping Status)
+  const isPercentage = title.includes("Status");
+
+  const isCapping = title.includes("Capping Type");
+  
   return (
     <div 
-      className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 sm:p-3 hover:bg-gray-100 dark:hover:bg-gray-750 transition-all cursor-pointer border border-gray-200 dark:border-gray-700"
+      className="bg-gray-50 dark:bg-blue-800/10 rounded-lg p-2 sm:p-3 hover:bg-gray-100 dark:hover:bg-gray-750 transition-all cursor-pointer border border-gray-200 dark:border-gray-700"
       onClick={() => navigate(navigateTo)}
     >
       <div className="flex justify-between items-start">
@@ -583,10 +597,14 @@ export const TradingSummaryItem = ({ title, value, subtitle, icon, trend, naviga
         </div>
       </div>
       <div className="text-lg font-bold mt-2 text-gray-900 dark:text-white">
-        {value}{" "}
-        <span className="text-xs text-gray-500 dark:text-gray-400">
-          USDT
-        </span>
+        {isPercentage ? null : needsCurrencyLabel ? "$" : null}
+        {value} 
+        {isPercentage ? "%" : needsCurrencyLabel ? (
+          <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+            USDT
+          </span>
+        ) : null}
+                {isCapping ? "X" : null}
       </div>
       <div className={`mt-1 text-xs flex items-center ${
         trend?.includes('+') ? 'text-green-600 dark:text-green-400' : 
@@ -595,13 +613,11 @@ export const TradingSummaryItem = ({ title, value, subtitle, icon, trend, naviga
       }`}>
         {trend ? (
           <>
-            {trend.includes('+') ? <ArrowUpRight size={10} className="mr-1" /> : 
-             trend.includes('-') ? <ArrowDownRight size={10} className="mr-1" /> : 
-             <MinusIcon size={10} className="mr-1" />}
+            {trend.includes('+') && <ArrowUpRight size={10} className="mr-1" />}
             <span>{trend}</span>
           </>
         ) : subtitle ? (
-          <span>{subtitle}</span>
+          <span className="text-gray-500 dark:text-gray-400">{subtitle}</span>
         ) : null}
       </div>
     </div>
@@ -625,18 +641,42 @@ export const AiBotControls = ({ isActive, onToggle }) => {
 };
 
 export const ReferralLinkCopy = ({ referralLink, onCopy }) => {
+
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+
+  const openWhatsApp = () => {
+    window.open(`https://wa.me/register?=${
+      user?.sponsorId || "RippFarm"
+    }`);
+  };
   return (
     <div className="mt-4">
-      <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm mb-3 overflow-hidden text-ellipsis border border-gray-200 dark:border-gray-600">
+      <div className="px-2 py-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm mb-3 overflow-hidden text-ellipsis border border-gray-200 dark:border-gray-600 truncate">
         {referralLink}
       </div>
+      <div className="flex flex-row  justify-between items-center gap-4">
+
       <button
-        className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors shadow-sm hover:shadow-md active:scale-95 transform transition-transform flex items-center justify-center"
+        className="w-full bg-indigo-600 text-white px-2 py-2 rounded-lg text-base font-medium hover:bg-indigo-700 transition-colors shadow-sm hover:shadow-md active:scale-95 transform transition-transform flex items-center justify-center"
         onClick={onCopy}
       >
         <Copy size={16} className="mr-2" />
         Copy Referral Link
       </button>
+      <motion.button
+                        onClick={openWhatsApp}
+                        className=" bg-gradient-to-br from-green-600 to-green-700 p-2 rounded-full shadow-md shadow-green-500/20 border border-green-500/30"
+                        whileHover={{
+                          scale: 1.1,
+                          boxShadow: "0 0 12px rgba(34,197,94,0.4)",
+                        }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <SiWhatsapp className="text-white " />
+                      </motion.button>
+      </div>
     </div>
   );
 };
+
+

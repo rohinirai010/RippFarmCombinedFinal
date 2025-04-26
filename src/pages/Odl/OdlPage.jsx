@@ -10,6 +10,7 @@ export default function ODLClaimPage() {
   const { timeLeft, claimed, loading } = useSelector(state => state.timer);
   
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showAlreadyClaimedToast, setShowAlreadyClaimedToast] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   
   // Check if claiming is available
@@ -30,7 +31,18 @@ export default function ODLClaimPage() {
   }, [dispatch]);
   
   const handleClaim = () => {
-    if (!canClaim) return;
+    if (!canClaim) {
+      // Show already claimed toast only if it was already claimed
+      if (claimed) {
+        setShowAlreadyClaimedToast(true);
+        
+        // Hide toast after 5 seconds
+        setTimeout(() => {
+          setShowAlreadyClaimedToast(false);
+        }, 5000);
+      }
+      return;
+    }
     
     dispatch(claimRewards());
     setShowConfirmation(true);
@@ -63,6 +75,23 @@ export default function ODLClaimPage() {
           <div>
             <p className="text-white font-medium">Successfully claimed!</p>
             <p className="text-blue-200 text-sm ">
+              Next claim available when timer expires
+            </p>
+          </div>
+        </div>
+      )}
+      
+      {/* Already claimed toast message */}
+      {showAlreadyClaimedToast && (
+        <div className="absolute top-14 z-50 bg-gradient-to-r from-orange-800 to-red-700 px-2 sm:px-8 py-2 sm:py-3 rounded-lg shadow-xl border border-orange-400 transform transition-all duration-300 flex items-center">
+          <div className="mr-3 text-orange-300">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-white font-medium">ODL Already Claimed</p>
+            <p className="text-orange-200 text-sm">
               Next claim available when timer expires
             </p>
           </div>
@@ -144,7 +173,6 @@ export default function ODLClaimPage() {
       {/* Claim button */}
       <button 
         onClick={handleClaim}
-        disabled={!canClaim}
         className={`px-8 py-3 w-[12rem] h-[4rem] rounded-full bg-gradient-to-br from-[#061758] via-[#061758] to-[#405395] text-[#6b86ee] font-medium border border-[#6b86ee] shadow-lg transition-all transform ${
           !canClaim 
             ? 'opacity-40 cursor-not-allowed filter blur-[0.5px]' 

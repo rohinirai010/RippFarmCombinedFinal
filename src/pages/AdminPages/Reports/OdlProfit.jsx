@@ -68,7 +68,7 @@ const dummyInvitationBonuses = [
     packageName: "Silver Package",
     packageAmount: 3000,
     bonusAmount: 300,
-    status: "Pending",
+    status: "Paid",
   },
   {
     id: 5,
@@ -161,26 +161,26 @@ const summaryData = [
 ];
 
 const StatsCard = ({ title, value, textColor = "text-black", icon: Icon }) => (
-  <div className="sm:px-2 py-2 flex flex-col items-center sm:items-start justify-center gap-1 transform transition-all duration-300">
+  <div className="sm:px-2  sm:py-2 flex flex-col items-center sm:items-start justify-center sm:gap-1 transform transition-all duration-300">
     <h3
-      className={`text-sm sm:text-base font-medium text-center tracking-wide ${textColor}`}
+      className={`text-[13px] sm:text-base font-medium text-center tracking-wide ${textColor}`}
     >
       {title}
     </h3>
-    <p className="text-xl font-bold text-center">{value}</p>
+    <p className="text-lg sm:text-xl font-bold text-center">{value}</p>
   </div>
 );
 
 const ExportButton = ({ label, bgColor, shadow, onClick }) => (
   <button
-    className={`${bgColor} ${shadow} text-white px-4 py-1 text-xs sm:text-sm rounded-lg hover:opacity-90 cursor-pointer`}
+    className={`${bgColor} ${shadow} text-white px-2 sm:px-4 py-[3px] sm:py-1 text-xs sm:text-sm rounded-lg hover:opacity-90 cursor-pointer`}
     onClick={onClick}
   >
     {label}
   </button>
 );
 
-const TeamWinningBonus = () => {
+const OdlProfit = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [bonusData, setBonusData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -241,7 +241,7 @@ const TeamWinningBonus = () => {
     },
     {
       key: "bonusAmount",
-      label: "Bonus Amount (10%)",
+      label: "Bonus Amount (20%)",
       sortable: true,
       render: (row) => (
         <span className="font-medium text-green-600">
@@ -559,7 +559,7 @@ const TeamWinningBonus = () => {
 
   // Tab switcher
   const TabSwitcher = () => (
-    <div className="flex mb-4 border-b border-gray-200 dark:border-gray-700">
+    <div className="flex mb-3 sm:mb-4 border-b border-gray-200 dark:border-gray-700">
       <button
         className={`py-2 px-4 text-sm font-medium ${
           activeTab === "report"
@@ -593,7 +593,7 @@ const TeamWinningBonus = () => {
         <main className="grow p-4 sm:p-6">
           <div className="max-w-full mx-auto">
             {/* Stats Cards */}
-            <div className="max-w-full px-2 rounded-xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-1 mb-6 bg-white dark:bg-gray-800 shadow-lg">
+            <div className="max-w-full px-2 py-[6px] sm:py-0 rounded-xl grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-1 mb-3 sm:mb-6 bg-white dark:bg-gray-800 shadow-lg">
               <StatsCard
                 title="Total Entries"
                 value={stats.totalBonuses}
@@ -631,11 +631,11 @@ const TeamWinningBonus = () => {
               />
             </div>
 
-            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-3 sm:px-4 py-6">
+            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-3 sm:px-4 py-3 sm:py-6">
               {/* Header Section */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
-                  Team Winning Bonus - 10%
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h2 className="text-lg sm:text-2xl font-bold text-gray-800 dark:text-white">
+                  ODL Profit - 20%
                 </h2>
                 {/* Export Buttons */}
                 <ExportSection />
@@ -644,14 +644,14 @@ const TeamWinningBonus = () => {
               {/* Tab Switcher */}
               <TabSwitcher />
 
-              {/* Date Filter - Only show for report tab */}
+              {/* Date Filter  */}
               {activeTab === "report" && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg px-0 sm:px-4 py-4 mb-6">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg px-0 sm:px-4 sm:py-4 mb-4 sm:mb-6">
                   <div className="flex flex-col space-y-2">
                     {/* Filter Header */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <CalendarIcon className="w-5 h-5 text-blue-500" />
+                        <CalendarIcon className="w-4 sm:w-5 h-4 sm:h-5 text-blue-500" />
                         <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">
                           Date Filter
                         </h3>
@@ -665,8 +665,8 @@ const TeamWinningBonus = () => {
                       </button>
                     </div>
 
-                    <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow-sm p-4">
-                      <div className="flex items-center gap-2 mb-3">
+                    <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow-sm p-2 sm:p-4">
+                      <div className="flex items-center gap-2 mb-2 sm:mb-3">
                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                         <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
                           Transaction Date
@@ -682,17 +682,17 @@ const TeamWinningBonus = () => {
               )}
 
               {/* Filters */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-6">
-                <div className="flex-1 sm:col-span-2 min-w-[200px]">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 pb-3 sm:pb-6">
+                <div className={`flex-1 sm:col-span-2 sm:min-w-[200px] ${activeTab === "summary" ? " col-span-2 min-w-[200px] mt-4" : ""}`}>
                   <div className="relative">
                     <input
                       type="text"
                       placeholder={
                         activeTab === "report"
-                          ? "Search by referrer, invitee, package..."
+                          ? "Search here..."
                           : "Search by referrer name, ID, level..."
                       }
-                      className="w-full px-4 py-1 text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+                      className="w-full px-3 sm:px-4 py-1 text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -709,7 +709,7 @@ const TeamWinningBonus = () => {
                     <option value="all">All Status</option>
                     <option value="paid">Paid</option>
                     <option value="pending">Pending</option>
-                    
+                   
                   </select>
                 )}
               </div>
@@ -820,4 +820,4 @@ const TeamWinningBonus = () => {
       );
     };
     
-    export default TeamWinningBonus;
+    export default OdlProfit;

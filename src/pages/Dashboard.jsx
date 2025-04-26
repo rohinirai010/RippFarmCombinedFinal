@@ -67,47 +67,79 @@ export default function Dashboard() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { walletBalance } = useSelector((state) => state.packageDetail);
   const { activePackageType } = useSelector((state) => state.packageDetail);
+  const [filter, setFilter] = useState("Last 30 days");
+
+  const teamDistributionData = {
+    "Last 7 days": {
+      totalTeam: 42,
+      teamPercentage: 75,
+      referralsPercentage: 25
+    },
+    "Last 30 days": {
+      totalTeam: 87,
+      teamPercentage: 88,
+      referralsPercentage: 12
+    },
+    "Last 90 days": {
+      totalTeam: 156,
+      teamPercentage: 82,
+      referralsPercentage: 18
+    },
+    "All time": {
+      totalTeam: 245,
+      teamPercentage: 80,
+      referralsPercentage: 20
+    }
+  };
+
+  const [data, setData] = useState(teamDistributionData["Last 30 days"]);
+
+  useEffect(() => {
+    setData(teamDistributionData[filter]);
+  }, [filter]);
+
+
 
   // Sample activities data
   const activities = [
     {
       id: 1,
-      title: "Daily Reward",
+      title: "Daily XRP Bounty",
       amount: "+$25",
       icon: <Gift className="w-4 sm:w-5 h-4 sm:h-5" />,
       time: "2 hours ago",
     },
     {
       id: 2,
-      title: "Investment Return",
+      title: "Direct Bounty",
       amount: "+$120",
       icon: <TrendingUp className="w-4 sm:w-5 h-4 sm:h-5" />,
       time: "Yesterday",
     },
     {
       id: 3,
-      title: "Premium Subscription",
+      title: "User Network Bounty",
       amount: "-$15",
       icon: <Shield className="w-4 sm:w-5 h-4 sm:h-5" />,
       time: "Apr 05",
     },
     {
       id: 4,
-      title: "Referral Bonus",
+      title: "Beyond Limit Bonus",
       amount: "+$50",
       icon: <Award className="w-4 sm:w-5 h-4 sm:h-5" />,
       time: "Apr 03",
     },
     {
       id: 5,
-      title: "Task Completion",
+      title: "ODL Profit",
       amount: "+$35",
       icon: <Briefcase className="w-4 sm:w-5 h-4 sm:h-5" />,
       time: "Apr 02",
     },
     {
       id: 6,
-      title: "Monthly Dividend",
+      title: "Total Earnings",
       amount: "+$78",
       icon: <Calendar className="w-4 sm:w-5 h-4 sm:h-5" />,
       time: "Apr 01",
@@ -119,9 +151,10 @@ export default function Dashboard() {
     totalTeam: 17,
     totalReferrals: 2,
     totalDeposit: 0,
-    totalWithdrawal: 0,
+    totalWithdrawal: 400,
     earningWallet: 603.3,
     depositWallet: 0,
+    todaysEarning: 1200,
     todaysTeamDeposit: 0,
     teamBusiness: 0,
     totalProfit: 0,
@@ -139,6 +172,7 @@ export default function Dashboard() {
       range: "$100 to $999",
       unlockedLevels: 5,
       totalLevels: 10,
+      capping: 2,
     },
     elevatePlus: {
       name: "Elevate Plus",
@@ -146,6 +180,7 @@ export default function Dashboard() {
       range: "$1000 to $9999",
       unlockedLevels: 5,
       totalLevels: 10,
+      capping: 2,
     },
     legacyVault: {
       name: "Legacy Vault",
@@ -153,6 +188,7 @@ export default function Dashboard() {
       range: "$10000+",
       unlockedLevels: 10,
       totalLevels: 10,
+      capping: 3,
     },
   };
 
@@ -418,142 +454,158 @@ export default function Dashboard() {
               />
             </div>
 
-            {/* Team Distribution and Trading Summary */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Team Distribution and account Summary */}
+            <div className="grid grid-cols-1  gap-3">
               {/* Team Distribution Card */}
-              <div className="bg-white dark:bg-gray-900 rounded-xl p-3 shadow-lg border border-gray-200 dark:border-gray-800">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-base font-medium text-gray-800 dark:text-white flex items-center">
-                    <Users className="mr-2 text-violet-500" size={18} />
-                    Team Distribution
-                  </h2>
-                  <TeamDistributionFilter onFilterChange={setTeamFilter} />
+              <div className="bg-white dark:bg-gray-900/30 rounded-xl p-4 shadow-lg border border-gray-200 dark:border-gray-800">
+      <div className="flex justify-between items-center">
+        <h2 className="text-sm sm:text-xl font-medium text-gray-800 dark:text-white flex items-center">
+          <Users className="mr-3 text-violet-500 w-4 sm:w-6 h-4 sm:h-6" />
+          Team Distribution
+        </h2>
+        <TeamDistributionFilter onFilterChange={setFilter} />
+      </div>
+
+      <div className="flex flex-row w-full items-center justify-center gap-6 sm:gap-8">
+        {/* Donut Chart */}
+        <div className="relative h-42 flex items-center justify-center">
+          <div className="relative w-36 h-36">
+            <svg viewBox="0 0 36 36" className="w-full h-full">
+              <circle
+                cx="18"
+                cy="18"
+                r="15.91549430918954"
+                fill="transparent"
+                stroke="#e5e7eb"
+                strokeWidth="3.8"
+                className="dark:stroke-gray-700"
+              ></circle>
+              <circle
+                cx="18"
+                cy="18"
+                r="15.91549430918954"
+                fill="transparent"
+                stroke="#3b82f6"
+                strokeWidth="3.8"
+                strokeDasharray={`${data.referralsPercentage} ${100 - data.referralsPercentage}`}
+                strokeDashoffset="25"
+                className="transform -rotate-90 origin-center"
+                style={{
+                  animation: "donutGrow 1.5s ease-out forwards",
+                }}
+              ></circle>
+              <circle
+                cx="18"
+                cy="18"
+                r="15.91549430918954"
+                fill="transparent"
+                stroke="#8b5cf6"
+                strokeWidth="3.8"
+                strokeDasharray={`${data.teamPercentage} ${100 - data.teamPercentage}`}
+                strokeDashoffset={100 - data.referralsPercentage}
+                className="transform -rotate-90 origin-center"
+                style={{
+                  animation: "donutGrow 1.2s ease-out forwards",
+                }}
+              ></circle>
+            </svg>
+
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center bg-white dark:bg-gray-900 rounded-full w-24 h-24 flex flex-col items-center justify-center">
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                  {data.totalTeam}
                 </div>
-
-                {/* Donut Chart */}
-                <div className="relative h-48 flex items-center justify-center">
-                  <div className="relative w-36 h-36">
-                    <svg viewBox="0 0 36 36" className="w-full h-full">
-                      <circle
-                        cx="18"
-                        cy="18"
-                        r="15.91549430918954"
-                        fill="transparent"
-                        stroke="#e5e7eb"
-                        strokeWidth="3.8"
-                        className="dark:stroke-gray-700"
-                      ></circle>
-                      <circle
-                        cx="18"
-                        cy="18"
-                        r="15.91549430918954"
-                        fill="transparent"
-                        stroke="#3b82f6"
-                        strokeWidth="3.8"
-                        strokeDasharray="12 88"
-                        strokeDashoffset="25"
-                        className="transform -rotate-90 origin-center"
-                        style={{
-                          animation: "donutGrow 1.5s ease-out forwards",
-                        }}
-                      ></circle>
-                      <circle
-                        cx="18"
-                        cy="18"
-                        r="15.91549430918954"
-                        fill="transparent"
-                        stroke="#8b5cf6"
-                        strokeWidth="3.8"
-                        strokeDasharray="88 12"
-                        strokeDashoffset="100"
-                        className="transform -rotate-90 origin-center"
-                        style={{
-                          animation: "donutGrow 1.2s ease-out forwards",
-                        }}
-                      ></circle>
-                    </svg>
-
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center bg-white dark:bg-gray-900 rounded-full w-24 h-24 flex flex-col items-center justify-center">
-                        <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                          {dashboardData.totalTeam}
-                        </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
-                          Total Members
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-center space-x-8 mt-2">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-violet-500 mr-2"></div>
-                    <span className="text-xs text-gray-600 dark:text-gray-300">
-                      Total Team (88%)
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-                    <span className="text-xs text-gray-600 dark:text-gray-300">
-                      Referrals (12%)
-                    </span>
-                  </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  Total Members
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
 
-              {/* Trading Summary Card */}
-              <div className="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-lg border border-gray-200 dark:border-gray-800">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-base font-medium text-gray-800 dark:text-white flex items-center">
-                    <BarChart3 className="mr-2 text-blue-500" size={18} />
-                    Trading Summary
-                  </h2>
-                  <button
-                    className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
-                    onClick={() => console.log("Refresh data")}
-                  >
-                    <RefreshCcw size={14} className="hover:animate-spin" />
-                  </button>
-                </div>
+        <div className="flex flex-col justify-center space-y-2 mt-2">
+          <div className="flex items-center">
+            <div className="w-3 sm:w-4 h-3 sm:h-4 rounded-full bg-violet-500 mr-2"></div>
+            <span className="text-[14px] sm:text-lg text-gray-600 dark:text-gray-300">
+              Total Team ({data.teamPercentage}%)
+            </span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 sm:w-4 h-3 sm:h-4 rounded-full bg-blue-500 mr-2"></div>
+            <span className="text-[14px] sm:text-lg text-gray-600 dark:text-gray-300">
+              Referrals ({data.referralsPercentage}%)
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <TradingSummaryItem
-                    title="Today's Deposit"
-                    value={dashboardData.todaysTeamDeposit}
-                    icon={<Activity size={14} />}
-                    trend="+5.2% from yesterday"
-                    navigateTo="/user/deposits"
-                  />
-                  <TradingSummaryItem
-                    title="Total Deposit"
-                    value={dashboardData.totalDeposit}
-                    icon={<BarChart2 size={14} />}
-                    subtitle="Account lifetime"
-                    navigateTo="/user/deposits"
-                  />
-                  <TradingSummaryItem
-                    title="Total Profit"
-                    value={dashboardData.totalProfit}
-                    icon={<TrendingUp size={14} />}
-                    trend="+12.3% this month"
-                    navigateTo="/user/profits"
-                  />
-                  <TradingSummaryItem
-                    title="Referral Income"
-                    value={dashboardData.referralIncome}
-                    icon={<Repeat size={14} />}
-                    subtitle={`From ${dashboardData.totalTeam} members`}
-                    navigateTo="/user/referrals"
-                  />
-                </div>
-              </div>
+             {/* Account Summary Card */}
+<div className="bg-white dark:bg-gray-900/30 rounded-xl p-4 shadow-lg border border-gray-200 dark:border-gray-800">
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-base font-medium text-gray-800 dark:text-white flex items-center">
+      <BarChart3 className="mr-2 text-blue-500" size={18} />
+      Account Summary
+    </h2>
+    <button
+      className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+      onClick={() => console.log("Refresh data")}
+    >
+      <RefreshCcw size={14} className="hover:animate-spin" />
+    </button>
+  </div>
+
+  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+    <TradingSummaryItem
+      title="Total Earnings"
+      value={dashboardData.todaysEarning}
+      icon={<Activity size={14} />}
+      trend="+5.2% from yesterday"
+      navigateTo="/user/deposits"
+    />
+    <TradingSummaryItem
+      title="Active Package"
+      value={activePackageType ? packageDetails[activePackageType].name : "None"}
+      icon={<Package size={14} />}
+      subtitle="Account lifetime"
+      navigateTo="/user/deposits"
+    />
+    <TradingSummaryItem
+      title="Total Withdrawn"
+      value={dashboardData.totalWithdrawal}
+      icon={<TrendingUp size={14} />}
+      trend="+12.3% this month"
+      navigateTo="/user/withdrawals"
+    />
+    <TradingSummaryItem
+      title="Available Balance"
+      value={walletBalance.toLocaleString()}
+      icon={<Repeat size={14} />}
+      subtitle="Current balance"
+      navigateTo="/user/wallet"
+    />
+    <TradingSummaryItem
+      title="Capping Type"
+      value={activePackageType ? packageDetails[activePackageType].capping : "None"}
+      icon={<Shield size={14} />}
+      subtitle="Maximum limit"
+      navigateTo="/user/capping"
+    />
+    <TradingSummaryItem
+      title="Capping Status"
+      value={80}
+      icon={<BarChart2 size={14} />}
+      subtitle="Progress towards cap"
+      navigateTo="/user/capping"
+    />
+  </div>
+</div>
             </div>
 
             {/* AI Trading Bot and Wallets */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
               {/* AI Trading Bot */}
-              <div className="bg-white dark:bg-gray-800/30 border border-gray-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+              <div className="hidden bg-white dark:bg-gray-800/30 border border-gray-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
                 <div
                   className={`absolute inset-0 bg-gradient-to-r ${
                     aiActive
@@ -603,9 +655,9 @@ export default function Dashboard() {
               </div>
 
               {/* Referral Link */}
-              <div className="bg-white dark:bg-gray-800/30 border border-gray-700 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+              <div className="bg-gray-600 dark:bg-blue-900/20 border border-blue-900 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold">Invite Customer</h2>
+                  <h2 className="text-lg font-semibold">Invite Friends & Earn XRP</h2>
                   {linkCopied && (
                     <div className="flex items-center text-green-500 text-sm">
                       <ThumbsUp size={14} className="mr-1" /> Copied!
@@ -613,11 +665,47 @@ export default function Dashboard() {
                   )}
                 </div>
                 <ReferralLinkCopy
-                  referralLink={`http://bampasfx.com/m/join.aspx?spid=${
-                    user?.username || "TOP"
+                  referralLink={`www.rippfarm.com/register?=${
+                    user?.sponsorId || "RippFarm"
                   }`}
                   onCopy={handleCopyLink}
                 />
+              </div>
+              {/* Social Links */}
+              <div className="bg-gray-600 dark:bg-blue-900/20 border border-blue-900 rounded-lg p-2">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h2 className="text-white dark:text-gray-200 text-base font-bold">
+                      Connect with Community
+                    </h2>
+                    <p className="text-gray-400 dark:text-gray-300 sm:tracking-wider text-xs">
+                      Join thousands of members worldwide
+                    </p>
+                  </div>
+                  <div className="block sm:hidden bg-purple-600 dark:bg-purple-500/20 text-white dark:text-gray-800 text-xs font-medium px-2 py-1 rounded-full">
+                    Join us
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <SocialCard
+                    title="Twitter"
+                    icon={<BsTwitter className="w-4 h-4" />}
+                    color="blue"
+                  />
+                  <SocialCard
+                    title="Telegram"
+                    icon={<FaTelegram className="w-4 h-4" />}
+                    color="green"
+                  />
+                </div>
+
+                <div className="text-center mt-3">
+                  <p className="block sm:hidden text-gray-400 dark:text-gray-200 sm:tracking-wide text-xs">
+                    Joining our community means you'll never miss important
+                    updates
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -658,42 +746,7 @@ export default function Dashboard() {
                 />
               </div>
 
-              {/* Social Links */}
-              <div className="bg-gray-600 dark:bg-gray-900 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <h2 className="text-white dark:text-gray-200 text-lg font-bold">
-                      Connect with Community
-                    </h2>
-                    <p className="text-gray-400 dark:text-gray-500 text-xs">
-                      Join thousands of members worldwide
-                    </p>
-                  </div>
-                  <div className="bg-purple-600 dark:bg-purple-500 text-white dark:text-gray-800 text-xs font-medium px-1 sm:px-3 py-1 rounded-full">
-                    Join us
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <SocialCard
-                    title="Twitter"
-                    icon={<BsTwitter className="w-5 h-5" />}
-                    color="blue"
-                  />
-                  <SocialCard
-                    title="Telegram"
-                    icon={<FaTelegram className="w-5 h-5" />}
-                    color="green"
-                  />
-                </div>
-
-                <div className="text-center mt-3">
-                  <p className="text-gray-400 dark:text-gray-500 text-xs">
-                    Joining our community means you'll never miss important
-                    updates
-                  </p>
-                </div>
-              </div>
+              
             </div>
           </motion.div>
 

@@ -27,7 +27,6 @@ import {
   InfoRow,
   AnimatedBackground,
   LoadingScreen,
-  BotMetricCard,
   SwipeToActivateButton,
   ConfirmationModal,
   AlertToast,
@@ -58,6 +57,7 @@ const PackageDetail = () => {
   const [showDepositPopup, setShowDepositPopup] = useState(false);
   const [animatedBalance, setAnimatedBalance] = useState(0);
   const [animatedDailyProfit, setAnimatedDailyProfit] = useState(0);
+  const [showCautionTooltip, setShowCautionTooltip] = useState(false);
   const prevSliderValueRef = useRef(0);
 
   const audioRefs = useRef({
@@ -70,6 +70,7 @@ const PackageDetail = () => {
 
   const animationFrameRef = useRef();
   const depositPopupTimerRef = useRef(null);
+  const tooltipTimerRef = useRef(null);
 
   // sliderValue from Redux
   const sliderValue =
@@ -210,14 +211,31 @@ const PackageDetail = () => {
     }
   }, [packageData, packages, navigate]);
 
-  // Clean up deposit popup timer
+  // Clean up deposit popup timer and tooltip timer
   useEffect(() => {
     return () => {
       if (depositPopupTimerRef.current) {
         clearTimeout(depositPopupTimerRef.current);
       }
+      if (tooltipTimerRef.current) {
+        clearTimeout(tooltipTimerRef.current);
+      }
     };
   }, []);
+
+  const handleToggleCautionTooltip = () => {
+    playButtonClickSound();
+    setShowCautionTooltip((prev) => !prev);
+    
+    // Auto-hide tooltip after 6 seconds
+    if (tooltipTimerRef.current) {
+      clearTimeout(tooltipTimerRef.current);
+    }
+    
+    tooltipTimerRef.current = setTimeout(() => {
+      setShowCautionTooltip(false);
+    }, 6000);
+  };
 
   if (!packageData) {
     return <LoadingScreen />;
@@ -305,7 +323,7 @@ const PackageDetail = () => {
 
       setTimeout(() => {
         navigate("/user/dashboard");
-      }, 500);
+      }, 300);
     }, 3000);
   };
 
@@ -328,7 +346,7 @@ const PackageDetail = () => {
   };
 
   return (
-    <div className="flex flex-col max-w-xl mx-auto h-full bg-black text-white relative overflow-hidden">
+    <div className="flex flex-col max-w-xl mx-auto h-screen bg-black text-white relative overflow-hidden">
       {/* Animated Background  */}
       <AnimatedBackground />
 
@@ -374,11 +392,10 @@ const PackageDetail = () => {
         >
           <div>
             <p className="text-gray-400 flex items-center">
-              <Shield size={16} className="mr-1" /> Wallet Balance
+              <Shield size={16} className="mr-1" /> R-Wallet Balance
             </p>
             <motion.h2
               className="text-xl sm:text-2xl font-bold text-blue-400"
-              animate={{ scale: [1, 1.02, 1] }}
               transition={{
                 duration: 0.5,
                 repeat: Infinity,
@@ -418,12 +435,62 @@ const PackageDetail = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
-          className="sm:px-4 py-4 mx-4 mt-2"
+          className="sm:px-4 py-3 mx-4 mt-1 relative"
         >
-          <SectionTitle
-            icon={<Zap />}
-            title={`Activation ${packageData.name}`}
-          />
+          <div className="flex flex-row justify-between">
+            <SectionTitle
+              icon={<Zap />}
+              title={`Activate ${packageData.name}`}
+            />
+            <motion.div
+              animate={{ rotate: [0, 12, 0, -12, 0] }}
+              transition={{ duration: 1, repeat: Infinity }}
+              className="mt-1 mr-2 cursor-pointer"
+              onClick={handleToggleCautionTooltip}
+            >
+              <AlertCircle size={18} className="text-yellow-500" />
+            </motion.div>
+          </div>
+
+          {/* Caution Tooltip */}
+          <AnimatePresence>
+            {showCautionTooltip && (
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                className="absolute right-0 top-12 z-50 bg-gradient-to-br from-[#0a1631] to-[#051020] p-3 rounded-lg shadow-xl border border-blue-500/30 max-w-[90%] sm:max-w-[330px]"
+              >
+                <div className="flex items-start">
+                  <motion.div
+                    animate={{ rotate: [0, 10, 0, -10, 0] }}
+                    transition={{ duration: 5, repeat: Infinity }}
+                    className="mt-1 mr-2 flex-shrink-0"
+                  >
+                    <AlertCircle size={16} className="text-yellow-500" />
+                  </motion.div>
+                  <div>
+                    <h4 className="text-yellow-400 text-sm font-medium mb-1">Important Caution</h4>
+                    <p className="text-xs text-gray-300">
+                      Caution: The profit and loss estimates displayed are
+                      hypothetical and based on current market conditions. Actual
+                      results may vary based on real-time market fluctuations.
+                      Exercise caution and trade responsibly!
+                    </p>
+                    <div className="w-full mt-2">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 7 }}
+                        className="h-1 bg-gradient-to-r from-yellow-500 to-red-500 rounded-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <AnimatedCard className="px-4 py-2 power-pulse">
             <p className="text-sm sm:text-base text-gray-300  flex items-center">
@@ -445,29 +512,7 @@ const PackageDetail = () => {
               walletBalance={walletBalance}
             />
 
-            {/* Bot Activation Amount */}
-            <div className="mt-2 flex flex-row justify-between items-center">
-              <div>
-                <p className="text-xs sm:text-base text-gray-400">
-                  Bot Activation Amount
-                </p>
-                <motion.h3
-                  key={sliderValue}
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="text-base sm:text-xl font-bold text-blue-400  digital-counter"
-                >
-                  $ {formatNumber(sliderValue)}
-                </motion.h3>
-              </div>
-              <div className="flex text-xs mt-1">
-                <span className="text-gray-400 flex items-center">
-                  <Info size={12} className="mr-1" />
-                  Available: $ {formatNumber(walletBalance)}
-                </span>
-              </div>
-            </div>
+           
           </AnimatedCard>
         </motion.div>
 
@@ -485,78 +530,27 @@ const PackageDetail = () => {
 
           <AnimatedCard className="overflow-hidden cyber-panel">
             <InfoRow
-              label="Bot Activation Amount"
+              label={`${packageData.name} Activation Amount`}
               value={formatNumber(sliderValue)}
             />
             <InfoRow
-              label="Bot Profit Period"
+              label={` Profit Period & Deposit Takecare`}
               value={`${packageData.botProfitPeriod} Days`}
-              icon={<Clock />}
+              
             />
             <InfoRow
-              label="Deposit Takecare"
-              value={`${packageData.depositTakecare} Days`}
-            />
-            <InfoRow
-              label="Daily Bot Profit"
-              value={`${packageData.dailyRate}%`}
+              label="Daily XRP Bounty"
+              value={`$${formatNumber(animatedDailyProfit)}`}
               isHighlighted={true}
             />
             <InfoRow
-              label="Total Bot Profit"
+              label={`Total ${packageData.name} Profit`}
               value={`${
                 packageData.totalBotProfit ||
                 (packageData.dailyRate * packageData.botProfitPeriod).toFixed(2)
               }%`}
               isHighlighted={true}
             />
-          </AnimatedCard>
-        </motion.div>
-
-        {/* Bot Summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
-          className="sm:px-4 py-4 mx-4"
-        >
-          <SectionTitle icon={<Shield />} title="Bot Summary" />
-
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            <BotMetricCard
-              title="Daily Rate"
-              value={`${packageData.dailyRate}%`}
-              isHighlighted={true}
-              animate={true}
-            />
-
-            <BotMetricCard
-              title="Bot Deposit"
-              value={formatNumber(sliderValue)}
-            />
-
-            <BotMetricCard
-              title="Daily Profit"
-              value={`$${formatNumber(animatedDailyProfit)}`}
-            />
-          </div>
-
-          <AnimatedCard className="mt-4 p-2 pulse-warning">
-            <div className="flex items-start">
-              <motion.div
-                animate={{ rotate: [0, 10, 0, -10, 0] }}
-                transition={{ duration: 5, repeat: Infinity }}
-                className="mt-1 mr-2"
-              >
-                <AlertCircle size={16} className="text-yellow-500" />
-              </motion.div>
-              <p className="text-xs text-gray-400">
-                Caution: The profit and loss estimates displayed are
-                hypothetical and based on current market conditions. Actual
-                results may vary based on real-time market fluctuations.
-                Exercise caution and trade responsibly!
-              </p>
-            </div>
           </AnimatedCard>
         </motion.div>
 
@@ -677,3 +671,4 @@ const PackageDetail = () => {
 };
 
 export default PackageDetail;
+

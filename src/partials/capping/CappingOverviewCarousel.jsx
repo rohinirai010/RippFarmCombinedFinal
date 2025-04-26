@@ -131,18 +131,18 @@ export const CappingOverviewCarousel = () => {
   return (
     <>
       <div
-        className={`relative flex flex-col items-center justify-center rounded-3xl bg-gradient-to-br from-[#9eb7f3] via-[#2c3595] to-[#171f7d] opacity-80 px-5 py-4 transition-opacity duration-300 ${
+        className={`relative flex flex-col items-center justify-center rounded-3xl bg-gradient-to-br from-[#9eb7f3] via-[#2c3595] to-[#171f7d] opacity-80 px-3 sm:px-5 py-3 sm:py-4 transition-opacity duration-300 ${
           isAnimating ? "opacity-0" : "opacity-100"
         }`}
       >
-        <div className="w-full flex flex-col sm:flex-row justify-between">
+        <div className="w-full flex flex-row justify-between">
           <div className="w-full sm:w-[70%]">
             {/* Package info */}
-            <div className="w-full mb-3">
-              <h2 className="text-white text-2xl sm:text-3xl font-bold">
+            <div className="w-full mb-2 sm:mb-3">
+              <h2 className="text-white text-base sm:text-3xl font-bold">
                 Package: ${currentPackage.amount}
               </h2>
-              <p className="text-white/80 text-xs sm:text-[13px]">
+              <p className="text-white/80 text-[11px] sm:text-[13px]">
                 {currentPackage.name} | Activation Date:{" "}
                 {new Date(
                   demoActivationDate || currentPackage.activatedAt
@@ -159,9 +159,9 @@ export const CappingOverviewCarousel = () => {
             </div>
 
             {/* Capping limit  */}
-            <div className="w-full flex items-center mb-2">
-              <FaLock className="mr-2 w-4 sm:w-5 h-4 sm:h-5 text-yellow-600" />
-              <p className="text-white text-base sm:text-lg">
+            <div className="w-full flex items-center mb-1 sm:mb-2">
+              <FaLock className="mr-1 sm:mr-2 w-4 sm:w-5 h-4 sm:h-5 text-yellow-600" />
+              <p className="text-white text-[13px] sm:text-lg">
                 Capping Limit ({packages[currentPackage.type]?.capping || 2}X):
                 ${cappingAmount.toLocaleString()}
               </p>
@@ -169,10 +169,10 @@ export const CappingOverviewCarousel = () => {
 
             {/* Earned amount */}
             <div className="w-full flex items-center mb-2">
-              <span className="text-white text-sm sm:text-base mr-2">📝</span>
-              <p className="text-white text-base sm:text-lg">
+              <span className="text-white text-xs sm:text-base mr-1 sm:mr-2">📝</span>
+              <p className="text-white text-[13px] sm:text-lg">
                 Earned So Far:{" "}
-                <span className="text-xl font-bold">
+                <span className="text-sm sm:text-xl font-bold">
                   {" "}
                   ${earnedAmount.toLocaleString()}{" "}
                 </span>
@@ -182,11 +182,11 @@ export const CappingOverviewCarousel = () => {
 
           {/* Progress display */}
           <div className="w-full sm:w-[40%] flex flex-col items-center mt-2 sm:mt-0">
-            <h3 className="text-white font-medium">Earnings Progress</h3>
+            <h3 className="text-white font-medium text-sm sm:text-base mb-2 sm:mb-0">Earnings Progress</h3>
 
             <div className="flex items-center">
               {/* Circular progress indicator */}
-              <div className="relative h-24 w-24">
+              <div className="relative h-20 sm:h-24 w-20 sm:w-24">
                 {/* SVG for circular progress */}
                 <svg className="w-full h-full" viewBox="0 0 100 100">
                   {/* Background circle */}
@@ -205,7 +205,7 @@ export const CappingOverviewCarousel = () => {
                     r="40"
                     fill="transparent"
                     stroke={
-                      progress >= 100 ? "#EF4444" : "rgba(255, 255, 255, 0.2)"
+                      progress >= 100 ? "#EF4444 " : "rgba(255, 255, 255, 0.2)"
                     }
                     strokeWidth="8"
                     strokeLinecap="round"
@@ -249,8 +249,8 @@ export const CappingOverviewCarousel = () => {
               </div>
             </div>
             <div>
-              <p className="text-white font-semibold text-base mt-1">
-                ${earnedAmount.toLocaleString()} / $
+              <p className="text-white font-semibold text-xs sm:text-sm mt-[3px] sm:mt-1">
+              <span className="text-sm sm:text-base">${earnedAmount.toLocaleString()} </span> / $
                 {cappingAmount.toLocaleString()} Earned
               </p>
             </div>

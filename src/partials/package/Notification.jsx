@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, CheckCircle, Info } from 'lucide-react';
+import { AlertCircle, CheckCircle, Info, X } from 'lucide-react';
 
 const Notification = ({ type, message, duration = 5000, onClose }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -39,38 +39,60 @@ const Notification = ({ type, message, duration = 5000, onClose }) => {
     info: 'text-blue-200'
   };
   
+  // Create overlay effect for success notifications
+  const isSuccess = type === 'success';
+  
   return (
     <AnimatePresence>
       {isVisible && message && (
-        <motion.div
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 50, opacity: 0 }}
-          className={`fixed top-20 left-0 right-0 mx-auto w-5/6 max-w-md p-4 bg-gradient-to-r ${bgColors[type] || bgColors.info} rounded-lg border shadow-lg z-50 flex items-center`}
-        >
+        <>
+          {/* Background overlay/blur for success notifications */}
+          {isSuccess && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+              onClick={(e) => e.preventDefault()} 
+            />
+          )}
+          
           <motion.div
-            animate={{ rotate: [0, 10, 0, -10, 0] }}
-            transition={{ duration: 0.5, times: [0, 0.2, 0.5, 0.8, 1] }}
-            className="mr-3"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 50, opacity: 0 }}
+            className={`fixed top-20 left-0 right-0 mx-auto w-5/6 max-w-md p-4 bg-gradient-to-r ${bgColors[type] || bgColors.info} rounded-lg border shadow-lg ${isSuccess ? 'z-50' : 'z-40'} flex items-center`}
           >
-            {icons[type] || icons.info}
+            <motion.div
+              animate={{ 
+                rotate: isSuccess ? [0, 15, 0, -15, 0] : [0, 10, 0, -10, 0], 
+                scale: isSuccess ? [1, 1.2, 1] : [1, 1.1, 1]
+              }}
+              transition={{ 
+                duration: isSuccess ? 0.7 : 0.5, 
+                times: [0, 0.2, 0.5, 0.8, 1],
+                repeat: isSuccess ? 1 : 0
+              }}
+              className="mr-3"
+            >
+              {icons[type] || icons.info}
+            </motion.div>
+            <div className="flex-1">
+              <p className="font-bold text-white">{type.charAt(0).toUpperCase() + type.slice(1)}</p>
+              <p className={`text-sm ${textColors[type] || textColors.info}`}>{message}</p>
+            </div>
+            
+            <button 
+              onClick={() => {
+                setIsVisible(false);
+                if (onClose) setTimeout(onClose, 300);
+              }}
+              className={`ml-4 p-1 rounded-full hover:bg-black/20 ${isSuccess ? "hidden" : "block"} `}
+            >
+              <X size={16} className="text-white/70" />
+            </button>
           </motion.div>
-          <div className="flex-1">
-            <p className="font-bold text-white">{type.charAt(0).toUpperCase() + type.slice(1)}</p>
-            <p className={`text-sm ${textColors[type] || textColors.info}`}>{message}</p>
-          </div>
-          <button 
-            onClick={() => {
-              setIsVisible(false);
-              if (onClose) setTimeout(onClose, 300);
-            }}
-            className="ml-4 p-1 rounded-full hover:bg-black/20"
-          >
-            <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </motion.div>
+        </>
       )}
     </AnimatePresence>
   );

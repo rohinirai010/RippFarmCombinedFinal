@@ -15,6 +15,8 @@ import {
 import CommonTable from "../../../components/OverallCommonTable";
 import Footer from "../../../partials/Footer";
 import { motion } from "framer-motion";
+import { IoMdArrowRoundDown } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 const Helpdesk = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -27,6 +29,7 @@ const Helpdesk = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const navigate = useNavigate();
 
   // Simulate loading initial data
   useEffect(() => {
@@ -110,7 +113,7 @@ const Helpdesk = () => {
       value: tickets.length,
       icon: AlertCircle,
       color: "text-blue-600",
-      bgColor: "bg-blue-100",
+      bgColor: "bg-blue-900",
       change: "+12% from last week",
     },
     {
@@ -118,7 +121,7 @@ const Helpdesk = () => {
       value: tickets.filter((t) => t.status === "Pending").length,
       icon: Clock,
       color: "text-yellow-600",
-      bgColor: "bg-yellow-100",
+      bgColor: "bg-yellow-900",
       change: "-5% from last week",
     },
     {
@@ -126,7 +129,7 @@ const Helpdesk = () => {
       value: tickets.filter((t) => t.status === "Resolved").length,
       icon: CheckCircle,
       color: "text-green-600",
-      bgColor: "bg-green-100",
+      bgColor: "bg-green-900",
       change: "+18% from last week",
     },
   ];
@@ -274,16 +277,28 @@ const Helpdesk = () => {
    
 
         <main className="max-w-xl mx-auto h-screen bg-gradient-to-b from-[#000621] via-[#0a0e2e] to-[#141539]">
+               {/* Header */}
+               <motion.header className="top-0 left-0 z-30 transition-all duration-300">
+                    <div className="px-4 sm:px-6 pt-6 pb-2 flex justify-between items-center">
+                      <div className="flex items-center">
+                        <motion.button
+                          onClick={() => navigate("/user/account")}
+                          className="mr-4 bg-[#070d25]/80 p-2 rounded-lg border border-blue-500/20"
+                          whileHover={{ scale: 1.1, rotate: -5 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <IoMdArrowRoundDown className="text-xl transform rotate-90 text-blue-400" />
+                        </motion.button>
+                        <h1 className="text-lg sm:text-2xl font-bold text-blue-400">
+                          Helpdesk
+                        </h1>
+                      </div>
+                    </div>
+                  </motion.header>
           <div className="grow px-3 sm:px-6 py-6 ">
+
             <div className="flex flex-col gap-6">
-              {/* Breadcrumb */}
-              <nav className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                <span>Help Desk</span>
-                <ChevronRight className="w-4 h-4" />
-                <span className="font-medium text-gray-900 dark:text-white">
-                  {activeTab === "dashboard" ? "Dashboard" : "New Ticket"}
-                </span>
-              </nav>
+              
 
               {/* Page Header */}
               <div className="flex justify-between items-center">
@@ -318,26 +333,26 @@ const Helpdesk = () => {
               {activeTab === "dashboard" && (
                 <>
                   {/* Stats */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-4">
                     {stats.map((stat) => (
                       <div
                         key={stat.label}
-                        className="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-2 shadow-sm"
+                        className={` rounded-lg p-2 shadow-sm border border-gray-600 ${stat.bgColor} ${stat.color}`}
                       >
-                        <div className="flex items-center gap-4 sm:gap-3">
+                        <div className="flex items-center gap-3">
                           <div
-                            className={`p-2 sm:p-1 rounded-full ${stat.bgColor} ${stat.color}`}
+                            className={`hidden sm:block p-2 sm:p-1 rounded-full ${stat.bgColor} ${stat.color}`}
                           >
                             <stat.icon className="w-6 h-6" />
                           </div>
                           <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                            <p className="text-sm font-medium text-gray-600 dark:text-gray-200">
                               {stat.label}
                             </p>
                             <p className="text-2xl font-semibold text-gray-900 dark:text-white">
                               {stat.value}
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            <p className="text-xs text-gray-500 dark:text-gray-200 mt-1">
                               {stat.change}
                             </p>
                           </div>
@@ -392,7 +407,8 @@ const Helpdesk = () => {
               )}
 
               {activeTab === "new" && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 ">
+                  
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
                     Complaint Registration Form
                   </h2>
@@ -511,11 +527,10 @@ const Helpdesk = () => {
               )}
             </div>
           </div>
+          <div className="h-22"></div>
            {/* Footer */}
       <motion.div
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
+        
         className="z-10"
       >
         <Footer activeTab={activeTab} setActiveTab={setActiveTab} />

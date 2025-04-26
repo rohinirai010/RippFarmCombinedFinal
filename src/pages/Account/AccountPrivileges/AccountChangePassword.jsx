@@ -297,7 +297,7 @@ const AccountChangePassword = ({ onClose }) => {
                   type="button"
                   onClick={sendVerificationCode}
                   disabled={codeSent}
-                  className="ml-2 text-xs bg-purple-600 hover:bg-purple-700 text-white px-4 py-1"
+                  className="ml-2 text-xs bg-purple-600/30 hover:bg-purple-700/20 text-white px-4 py-1"
                 >
                   {codeSent ? 'Code Sent' : 'Send Code'}
                 </Button>
@@ -350,7 +350,7 @@ const AccountChangePassword = ({ onClose }) => {
               <Button 
                 type="submit"
                 disabled={submitted || isLoading}
-                className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg w-full sm:w-auto"
+                className="flex flex-row items-center  gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-2xl font-bold button-glow shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 {(submitted || isLoading) ? (
                   <span className="flex items-center justify-center">

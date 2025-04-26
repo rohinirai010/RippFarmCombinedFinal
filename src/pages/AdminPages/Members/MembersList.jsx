@@ -8,6 +8,7 @@ import {
   Edit,
   Check,
   CalendarIcon,
+  Filter,
 } from "lucide-react";
 import Header from "../../../partials/AdminPartials/Header";
 import Sidebar from "../../../partials/AdminPartials/Sidebar";
@@ -29,17 +30,17 @@ import DatePickerWithRange from "../../../components/Datepicker";
 const StatsCard = ({ title, value, textColor = "text-black", icon: Icon }) => (
   <div className="p-2 flex flex-col items-center sm:items-start justify-center gap-1 transform transition-all duration-300">
     <h3
-      className={`text-base font-medium text-center tracking-wide ${textColor} `}
+      className={`text-[15px] sm:text-base font-medium text-center tracking-wide ${textColor} `}
     >
       {title}
     </h3>
-    <p className="text-2xl font-bold text-center">{value}</p>
+    <p className="text-xl sm:text-2xl font-bold text-center">{value}</p>
   </div>
 );
 
 const ExportButton = ({ label, bgColor, shadow, onClick }) => (
   <button
-    className={`${bgColor} ${shadow} text-white px-4 py-1 text-sm rounded-lg hover:opacity-90 cursor-pointer`}
+    className={`${bgColor} ${shadow} text-white px-2 sm:px-4 py-1 text-[13px] sm:text-sm rounded-lg hover:opacity-90 cursor-pointer`}
     onClick={onClick}
   >
     {label}
@@ -74,6 +75,7 @@ const MembersList = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [isModalClosing, setIsModalClosing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     actionType: null,
@@ -83,140 +85,6 @@ const MembersList = () => {
   });
   const itemsPerPage = 5;
 
-  const columns = [
-    { 
-      key: 'edit', 
-      label: 'Edit',
-      render: (row) => (
-        <div className="flex flex-row items-center gap-2">
-          <div onClick={() => handleEditClick(row)} className="text-center">
-            <Edit className="w-4 h-4 text-red-500 cursor-pointer" />
-          </div>
-          {lastEdited[row.id] && (
-            <div className="text-[10px] text-gray-500 dark:text-gray-400 mt-1">
-              Last Edited: <br /> {lastEdited[row.id]}
-            </div>
-          )}
-        </div>
-      )
-    },
-    {
-      key: 'action',
-      label: 'Action',
-      render: (row) => (
-        <button 
-          // onClick={() => handleLoginClick(row)}
-          className="px-2 py-[2px] text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer"
-        >
-          Login
-        </button>
-      )
-    },
-    {
-      key: 'blockStatus',
-      label: 'Block/Unblock',
-      render: (row) => (
-        <button
-          onClick={() => handleBlockToggle(row)}
-          className={`px-2 py-[2px] text-xs text-white rounded-lg cursor-pointer ${
-            memberStatus[row.id]
-              ? "bg-red-500 hover:bg-red-600"
-              : "bg-green-500 hover:bg-green-600"
-          }`}
-        >
-          {memberStatus[row.id] ? "Block" : "Unblock"}
-        </button>
-      )
-    },
-    {
-      key: 'pinStatus',
-      label: '0 Pin',
-      render: (row) => (
-        <button
-          onClick={() => handlePinToggle(row)}
-          className={`px-2 py-[2px] rounded-lg text-xs cursor-pointer ${
-            pinStatus[row.id]
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
-          }`}
-        >
-          {pinStatus[row.id] ? "ON" : "OFF"}
-        </button>
-      )
-    },
-    {
-      key: 'levelManual',
-      label: 'Level Manual',
-      render: (row) => (
-        <button
-          onClick={() => handleLevelToggle(row)}
-          className={`px-2 py-[2px] rounded-lg text-xs cursor-pointer ${
-            levelStatus[row.id]
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
-          }`}
-        >
-          {levelStatus[row.id] ? "Level ON" : "Level OFF"}
-        </button>
-      )
-    },
-    { key: 'id', label: 'Sr. No' },
-    { key: 'fullname', label: 'Full Name' },
-    { key: 'memberId', label: 'Member Id' },
-    { key: 'totalActiveDirects', label: 'Total Active Directs' },
-    { key: 'password', label: 'Password' },
-    { key: 'systemPackage', label: 'System Package' },
-    { key: 'sponsorId', label: 'Sponsor Id' },
-    { key: 'sponsorName', label: 'Sponsor Name' },
-    { key: 'mobileNumber', label: 'Mobile Number' },
-    { key: 'activationDate', label: 'Activation Date' },
-    { key: 'registrationDate', label: 'Registration' },
-    {
-      key: 'kycStatus',
-      label: 'KYC Status',
-      render: (row) => (
-        <span
-          className={`px-2 py-[2px] rounded-full text-xs ${
-            row.kycStatus === "Verified"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-200 text-red-800"
-          }`}
-        >
-          {row.kycStatus}
-        </span>
-      )
-    },
-    {
-      key: 'bankStatus',
-      label: 'Bank Status',
-      render: (row) => (
-        <span
-          className={`px-2 py-[2px] rounded-full text-xs ${
-            row.bankStatus === "Verified"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-200 text-red-800"
-          }`}
-        >
-          {row.bankStatus}
-        </span>
-      )
-    },
-    {
-      key: 'userStatus',
-      label: 'User Status',
-      render: (row) => (
-        <span
-          className={`px-2 py-[2px] rounded-full text-xs ${
-            row.userStatus === "Active"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-200 text-red-800"
-          }`}
-        >
-          {row.userStatus}
-        </span>
-      )
-    }
-  ];
 
   useEffect(() => {
     setMembersData(data);
@@ -238,21 +106,6 @@ const MembersList = () => {
     setPinStatus(initialPinStatus);
     setLevelStatus(initialLevelStatus);
   }, []);
-
-  // const handleLoginClick = (member) => {
-  //   setConfirmDialog({
-  //     isOpen: true,
-  //     actionType: "login",
-  //     memberData: member,
-  //     currentStatus: true,
-  //     title: "Confirm Login",
-  //     message: "Are you sure you want to login as this member?",
-  //     onConfirm: () => {
-  //       // Your login logic here
-  //       setConfirmDialog({ isOpen: false });
-  //     },
-  //   });
-  // };
 
   const handleBlockToggle = (member) => {
     const isActive = memberStatus[member.id];
@@ -427,7 +280,6 @@ const filteredData = useMemo(() => {
 ]);
   
  
-
   // Pagination
   const paginatedData = useMemo(() => {
     const sortedData = sortData(filteredData, sortConfig);
@@ -529,9 +381,6 @@ const filteredData = useMemo(() => {
   //  export buttons section
   const ExportSection = () => (
     <div className="flex items-center gap-4">
-      {/* <span className="text-sm text-gray-600 dark:text-gray-300">
-        {selectedRows.size} rows selected
-      </span> */}
       <div className="flex gap-2">
         <ExportButton
           label={
@@ -589,6 +438,65 @@ const filteredData = useMemo(() => {
     </div>
   );
 
+  // Date Filters Component
+  const DateFiltersComponent = () => (
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg sm:p-4 mb-3 sm:mb-6">
+      <div className="flex flex-col space-y-2">
+        {/* Filter Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CalendarIcon className="w-5 h-5 text-blue-500" />
+            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">
+              Date Filters
+            </h3>
+          </div>
+          <button
+            onClick={resetFilters}
+            className="flex items-center text-[red] gap-1 px-3 py-1 text-xs hover:text-gray-900 dark:hover:text-gray-100 transition-colors cursor-pointer"
+          >
+            <IoRemoveCircle className="w-4 h-4 " />
+            Clear Filters
+          </button>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-2 sm:gap-6">
+          {/* Registration Date Filter */}
+          <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow-sm p-4">
+            <div className="flex items-center gap-2 mb-3 ">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                Registration Period
+              </span>
+            </div>
+            <DatePickerWithRange
+              date={registrationDateRange}
+              onDateChange={setRegistrationDateRange}
+            />
+          </div>
+
+          {/* Activation Date Filter */}
+          <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow-sm p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                Activation Period
+              </span>
+            </div>
+            <DatePickerWithRange
+              date={activationDateRange}
+              onDateChange={setActivationDateRange}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Toggle mobile filters
+  const toggleMobileFilters = () => {
+    setShowMobileFilters(prev => !prev);
+  };
+
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -599,7 +507,7 @@ const filteredData = useMemo(() => {
         <main className="grow p-4 sm:p-6">
           <div className="max-w-full mx-auto">
             {/* Stats Cards */}
-            <div className="max-w-full sm:max-w-xs px-2 rounded-xl grid grid-cols-3   mb-6 bg-white dark:bg-gray-800  shadow-lg">
+            <div className="max-w-full sm:max-w-xs px-2 rounded-xl grid grid-cols-3 mb-6 bg-white dark:bg-gray-800 shadow-lg">
               <StatsCard
                 title="Accounts"
                 value={stats.totalJoinings}
@@ -622,12 +530,26 @@ const filteredData = useMemo(() => {
 
             <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-4 py-6">
               {/* Header Section */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+              <div className="flex flex-row items-center justify-between gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
                   Members List
                 </h2>
-                {/* Export Buttons */}
-                <ExportSection />
+
+                 {/* Mobile filter toggle button */}
+              <div className="md:hidden flex justify-end">
+                <button 
+                  className="flex items-center gap-1 px-2 py-1 text-xs bg-gray-400 text-gray-900 rounded-lg shadow"
+                  onClick={toggleMobileFilters}
+                >
+                  <Filter className="w-3 h-3" />
+                  {showMobileFilters ? "Hide Filters" : "Show Filters"}
+                </button>
+              </div>
+
+                {/* Export Buttons - Hidden on mobile, visible on larger screens */}
+                <div className="hidden md:block">
+                  <ExportSection />
+                </div>
               </div>
 
               {/* Copied Message */}
@@ -637,61 +559,25 @@ const filteredData = useMemo(() => {
                 </div>
               )}
 
-             {/* Date Filters */}
-<div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-6">
-  <div className="flex flex-col space-y-2">
-    {/* Filter Header */}
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <CalendarIcon className="w-5 h-5 text-blue-500" />
-        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">
-          Date Filters
-        </h3>
-      </div>
-      <button
-        onClick={resetFilters}
-        className="flex items-center text-[red] gap-1 px-3 py-1 text-xs  hover:text-gray-900  dark:hover:text-gray-100 transition-colors cursor-pointer"
-      >
-        <IoRemoveCircle className="w-4 h-4 " />
-        Clear Filters
-      </button>
-    </div>
+              {/* Date Filters - Hidden on mobile, visible on larger screens */}
+              <div className="hidden md:block">
+                <DateFiltersComponent />
+              </div>
 
-    <div className="grid lg:grid-cols-2 gap-6">
-  {/* Registration Date Filter */}
-  <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow-sm p-4">
-    <div className="flex items-center gap-2 mb-3 ">
-      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-      <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-        Registration Period
-      </span>
-    </div>
-    <DatePickerWithRange
-      date={registrationDateRange}
-      onDateChange={setRegistrationDateRange}
-    />
-  </div>
-
-  {/* Activation Date Filter */}
-  <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow-sm p-4">
-    <div className="flex items-center gap-2 mb-3">
-      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-      <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-        Activation Period
-      </span>
-    </div>
-    <DatePickerWithRange
-      date={activationDateRange}
-      onDateChange={setActivationDateRange}
-    />
-  </div>
-</div>
-  </div>
-</div>
+             
+              {/* Mobile filters dropdown */}
+              {showMobileFilters && (
+                <div className="md:hidden py-2  animate-fadeDown">
+                  <DateFiltersComponent />
+                  <div className="px-4 py-1 rounded-lg flex items-center justify-center">
+                    <ExportSection />
+                  </div>
+                </div>
+              )}
 
               {/* Filters */}
-              <div className="grid grid-cols-3 gap-4 pb-6">
-                <div className="flex-1 col-span-2 min-w-[200px]">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pb-6 mt-4">
+                <div className="flex-1 sm:col-span-2 sm:min-w-[200px]">
                   <div className="relative">
                     <input
                       type="text"
@@ -731,7 +617,6 @@ const filteredData = useMemo(() => {
                 onBlockToggle={handleBlockToggle}
                 onPinToggle={handlePinToggle}
                 onLevelToggle={handleLevelToggle}
-                // onLoginClick={handleLoginClick}
                 lastEdited={lastEdited}
               />
 
@@ -768,6 +653,7 @@ const filteredData = useMemo(() => {
             </div>
           </div>
         </main>
+        
         {/* Edit Modal */}
         {editModalOpen && selectedMember && (
           <div
@@ -847,4 +733,3 @@ const filteredData = useMemo(() => {
 };
 
 export default MembersList;
-

@@ -34,10 +34,10 @@ const PackageCard = ({
       className={`p-1 rounded-xl relative ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
       onClick={handleCardClick}
     >
-      <div className={` rounded-xl relative ${isDisabled ? ' filter blur-[1px]' : ''}`}>
+      <div className={`rounded-xl relative ${isDisabled ? 'filter blur-[1px]' : ''}`}>
         {isDisabled && (
-          <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/10  rounded-xl">
-
+          <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/10 rounded-xl">
+            <Lock size={24} className="text-red-400 animate-pulse" />
           </div>
         )}
         <div className="absolute inset-x-0 top-0 p-2 bg-gradient-to-b from-[#1f2984] via-[#5569c1] to-blue-300 rounded-2xl border-b-7 border-[#fdffff]">
@@ -73,7 +73,7 @@ const LivePackagePage = () => {
   const navigate = useNavigate();
   
   // Get the active package from Redux state
-  const { activePackageType } = useSelector((state) => state.packageDetail);
+  const { activePackageType, activatedPackages } = useSelector((state) => state.packageDetail);
 
   // Package data with level information
   const packages = [
@@ -109,6 +109,18 @@ const LivePackagePage = () => {
     },
   ];
 
+  // Check if a higher level package is active
+  const isHigherPackageActivated = (currentLevel) => {
+    // Filter activated packages that are active (not inactive)
+    const activePackages = activatedPackages.filter(pkg => pkg.status === 'active');
+    
+    // Find packages with higher levels than the current one
+    return activePackages.some(activePkg => {
+      const packageInfo = packages.find(pkg => pkg.packageType === activePkg.type);
+      return packageInfo && packageInfo.level > currentLevel;
+    });
+  };
+
   // Get the selected package level
   const getSelectedPackageLevel = () => {
     const selectedPackage = packages.find(pkg => pkg.packageType === activePackageType);
@@ -143,7 +155,8 @@ const LivePackagePage = () => {
           </div>
           <div className="grid grid-cols-3 sm:gap-2">
             {packages.map((pkg, index) => {
-              const isDisabled = selectedLevel > pkg.level;
+              // Only disable if higher package is activated
+              const isDisabled = isHigherPackageActivated(pkg.level);
               
               return (
                 <PackageCard

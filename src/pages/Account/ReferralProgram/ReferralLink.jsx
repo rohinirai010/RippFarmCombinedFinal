@@ -15,7 +15,7 @@ const ReferralLink = ({ isOpen, setIsOpen, referralLink = "https://your-referral
   const showNotification = (message) => {
     const notification = document.createElement("div");
     notification.className =
-      "fixed top-10 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white py-2 px-2 sm:px-4 rounded-lg shadow-lg z-50";
+      "fixed top-10 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white min-w-xs  sm:min-w-sm text-center text-base py-2 px-1 sm:px-4 rounded-lg shadow-lg z-50";
     notification.textContent = message;
     document.body.appendChild(notification);
 
@@ -89,7 +89,7 @@ const ReferralLink = ({ isOpen, setIsOpen, referralLink = "https://your-referral
                   as="h3"
                   className="text-xl font-semibold leading-6 text-center text-gray-900 dark:text-white mb-2"
                 >
-                  Refer a Friend
+                  Refer a friend & earn XRP
                 </Dialog.Title>
 
                 <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">
@@ -119,24 +119,24 @@ const ReferralLink = ({ isOpen, setIsOpen, referralLink = "https://your-referral
 
                 <div className="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mr-3">
-                      <span className="text-green-600 dark:text-green-400 font-bold">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-700 flex items-center justify-center mr-3">
+                      <span className="text-blue-600 dark:text-blue-300 font-bold">
                         1
                       </span>
                     </div>
                     Share your referral link with friends
                   </div>
                   <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-3">
-                      <span className="text-blue-600 dark:text-blue-400 font-bold">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center mr-3">
+                      <span className="text-blue-600 dark:text-blue-300 font-bold">
                         2
                       </span>
                     </div>
                     They sign up using your link
                   </div>
                   <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                    <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-3">
-                      <span className="text-purple-600 dark:text-purple-400 font-bold">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-3">
+                      <span className="text-blue-600 dark:text-blue-400 font-bold">
                         3
                       </span>
                     </div>

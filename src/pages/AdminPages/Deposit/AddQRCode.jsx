@@ -218,7 +218,7 @@ const AddQRCode = () => {
         <main className="grow p-4 sm:p-6">
           <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-4 py-6">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
                 QR Code Management
               </h2>
               <div className="flex items-center gap-2 sm:gap-4">
@@ -246,7 +246,7 @@ const AddQRCode = () => {
                       setSearchTerm("");
                       setQrTypeFilter("all");
                     }}
-                    className="flex items-center gap-1 px-2 sm:px-3 py-1 text-[10px] sm:text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors cursor-pointer"
+                    className="flex items-center gap-1 px-2 sm:px-3 py-1 text-[10px] sm:text-xs text-red-600 hover:text-red-900 dark:text-red-600 dark:hover:text-red-100 transition-colors cursor-pointer"
                   >
                     <IoRemoveCircle className="w-4 h-4" />
                     Clear Filters
@@ -255,8 +255,8 @@ const AddQRCode = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 py-6">
-              <div className="col-span-1 sm:col-span-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6">
+              <div className="col-span-2">
               <div className="relative">
                   <input
                     type="text"
@@ -281,7 +281,7 @@ const AddQRCode = () => {
 
               <button
                 onClick={() => setShowModal(true)}
-                className="flex items-center justify-center gap-2 text-sm px-4 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer"
+                className="flex items-center justify-center gap-2 text-xs sm:text-sm px-3 sm:px-4 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 Add QR Code

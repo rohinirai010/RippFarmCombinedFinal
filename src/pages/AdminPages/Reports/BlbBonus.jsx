@@ -42,7 +42,7 @@ const dummyInvitationBonuses = [
     
     packageAmount: 2000,
     bonusAmount: 200,
-    status: "Paid",
+    status: "Pending",
   },
   {
     id: 3,
@@ -68,7 +68,7 @@ const dummyInvitationBonuses = [
     packageName: "Silver Package",
     packageAmount: 3000,
     bonusAmount: 300,
-    status: "Pending",
+    status: "Paid",
   },
   {
     id: 5,
@@ -161,9 +161,9 @@ const summaryData = [
 ];
 
 const StatsCard = ({ title, value, textColor = "text-black", icon: Icon }) => (
-  <div className="sm:px-2 py-1 sm:py-2 flex flex-col items-center sm:items-start justify-center gap-1 transform transition-all duration-300">
+  <div className="sm:px-2  sm:py-2 flex flex-col items-center sm:items-start justify-center sm:gap-1 transform transition-all duration-300">
     <h3
-      className={` text-[13px] sm:text-base font-medium text-center tracking-wide ${textColor}`}
+      className={`text-[13px] sm:text-base font-medium text-center tracking-wide ${textColor}`}
     >
       {title}
     </h3>
@@ -180,7 +180,7 @@ const ExportButton = ({ label, bgColor, shadow, onClick }) => (
   </button>
 );
 
-const InvitationBonus = () => {
+const BlbBonus = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [bonusData, setBonusData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -241,7 +241,7 @@ const InvitationBonus = () => {
     },
     {
       key: "bonusAmount",
-      label: "Bonus Amount (10%)",
+      label: "Bonus Amount (20%)",
       sortable: true,
       render: (row) => (
         <span className="font-medium text-green-600">
@@ -559,7 +559,7 @@ const InvitationBonus = () => {
 
   // Tab switcher
   const TabSwitcher = () => (
-    <div className="flex sm:mb-4 border-b border-gray-200 dark:border-gray-700">
+    <div className="flex mb-3 sm:mb-4 border-b border-gray-200 dark:border-gray-700">
       <button
         className={`py-2 px-4 text-sm font-medium ${
           activeTab === "report"
@@ -593,7 +593,7 @@ const InvitationBonus = () => {
         <main className="grow p-4 sm:p-6">
           <div className="max-w-full mx-auto">
             {/* Stats Cards */}
-            <div className="max-w-full px-2 rounded-xl grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 sm:gap-1 mb-4 sm:mb-6 bg-white dark:bg-gray-800 shadow-lg">
+            <div className="max-w-full px-2 py-[6px] sm:py-0 rounded-xl grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-1 mb-3 sm:mb-6 bg-white dark:bg-gray-800 shadow-lg">
               <StatsCard
                 title="Total Entries"
                 value={stats.totalBonuses}
@@ -633,9 +633,9 @@ const InvitationBonus = () => {
 
             <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-3 sm:px-4 py-3 sm:py-6">
               {/* Header Section */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
                 <h2 className="text-lg sm:text-2xl font-bold text-gray-800 dark:text-white">
-                  Direct Bonus - 10%
+                  Beyond Limit Bonus - 20%
                 </h2>
                 {/* Export Buttons */}
                 <ExportSection />
@@ -644,15 +644,15 @@ const InvitationBonus = () => {
               {/* Tab Switcher */}
               <TabSwitcher />
 
-              {/* Date Filter */}
+              {/* Date Filter  */}
               {activeTab === "report" && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg px-0 sm:px-4 pt-4 sm:pt-0 sm:py-4 mb-4 sm:mb-6">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg px-0 sm:px-4 sm:py-4 mb-4 sm:mb-6">
                   <div className="flex flex-col space-y-2">
                     {/* Filter Header */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <CalendarIcon className="w-4 sm:w-5 h-4 sm:h-5 text-blue-500" />
-                        <h3 className="text-[13px] sm:text-sm font-medium text-gray-700 dark:text-gray-200">
+                        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">
                           Date Filter
                         </h3>
                       </div>
@@ -682,14 +682,14 @@ const InvitationBonus = () => {
               )}
 
               {/* Filters */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pb-2 sm;pb-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4 pb-3 sm:pb-6">
                 <div className={`flex-1 sm:col-span-2 sm:min-w-[200px] ${activeTab === "summary" ? " col-span-2 min-w-[200px] mt-4" : ""}`}>
                   <div className="relative">
                     <input
                       type="text"
                       placeholder={
                         activeTab === "report"
-                          ? "Search by referrer, invitee, package..."
+                          ? "Search here..."
                           : "Search by referrer name, ID, level..."
                       }
                       className="w-full px-3 sm:px-4 py-1 text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
@@ -707,7 +707,7 @@ const InvitationBonus = () => {
                     onChange={(e) => setStatusFilter(e.target.value)}
                   >
                     <option value="all">All Status</option>
-                    <option value="approved">Approved</option>
+                    <option value="paid">Paid</option>
                     <option value="pending">Pending</option>
                    
                   </select>
@@ -820,4 +820,4 @@ const InvitationBonus = () => {
       );
     };
     
-    export default InvitationBonus;
+    export default BlbBonus;

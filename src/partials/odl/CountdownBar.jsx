@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, Gift, ArrowRight, Bell } from "lucide-react";
+import { Clock, Gift, ArrowRight } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeTimer, updateTimer, setPulseEffect } from "../../ReduxStateManagement/slices/timerSlice";
 
 export function CountdownBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { timeLeft, pulseEffect } = useSelector(state => state.timer);
+  const { timeLeft, pulseEffect, claimed } = useSelector(state => state.timer);
   
   // Initialize timer when component mounts
   useEffect(() => {
@@ -50,6 +50,9 @@ export function CountdownBar() {
   const totalSecondsMax = 72 * 3600; // 72 hours in seconds
   const currentTotalSeconds = timeLeft.hours * 3600 + timeLeft.minutes * 60 + timeLeft.seconds;
   const progressPercentage = 100 - (currentTotalSeconds / totalSecondsMax * 100);
+  
+  // Check if time remaining is less than or equal to 10 hours
+  const isLessThan10Hours = currentTotalSeconds <= 10 * 3600;
 
   return (
     <div className="fixed bottom-20 sm:bottom-22 left-0 right-0 max-w-xl mx-auto px-2 z-30">
@@ -61,32 +64,34 @@ export function CountdownBar() {
       >
         {/* Progress bar */}
         <div 
-          className="absolute bottom-0 left-0 h-1 bg-indigo-400"
+          className={`absolute bottom-0 left-0 h-1 ${isLessThan10Hours ? 'bg-red-500' : 'bg-indigo-400'}`}
           style={{ width: `${progressPercentage}%` }}
         ></div>
         
         <div className="flex items-center justify-between px-1 sm:px-3 py-2">
           <div className="flex items-center space-x-1 sm:space-x-2">
             <div className="bg-indigo-700/40 p-1 sm:p-1.5 rounded-full">
-              <Gift size={16} className="text-indigo-200" />
+              <Gift className={`w-3 sm:w-4 h-3 sm:h-4 ${isLessThan10Hours ? 'text-indigo-200' : 'text-indigo-200'}`} />
             </div>
             <div>
-              <div className="font-bold text-indigo-200 flex items-center text-[11px] sm:text-sm">
-                
-                <span className="truncate">Claim ODL Rewards before time runs out!</span>
+              <div className="font-bold flex items-center text-[10px] sm:text-sm">
+                <span className={`truncate ${isLessThan10Hours ? 'text-indigo-200' : 'text-indigo-200'}`}>
+                  {claimed 
+                    ? "ODL claimed! Next claim when timer ends" 
+                    : "Claim ODL Rewards before time runs out!"}
+                </span>
               </div>
-             
             </div>
           </div>
           
           <div className="flex items-center">
-            <div className="flex items-center bg-indigo-700/70 px-1.5 sm:px-3 py-1 rounded-lg mr-1 sm:mr-2">
-              <Clock size={12} className="mr-1 text-indigo-200 hidden sm:block" />
-              <span className="font-mono tracking-wider font-bold text-[11px] sm:text-sm">
+            <div className={`flex items-center ${isLessThan10Hours ? 'bg-red-700/70' : 'bg-indigo-700/70'} px-1.5 sm:px-3 py-1 rounded-lg mr-1 sm:mr-2`}>
+              <Clock size={12} className={`mr-1 ${isLessThan10Hours ? 'text-red-300' : 'text-indigo-200'} hidden sm:block`} />
+              <span className={`font-mono tracking-wider font-bold text-[11px] sm:text-sm ${isLessThan10Hours ? 'text-red-100' : ''}`}>
                 {formatTime(timeLeft.hours)}:{formatTime(timeLeft.minutes)}:{formatTime(timeLeft.seconds)}
               </span>
             </div>
-            <ArrowRight size={16} className="text-indigo-200 animate-pulse" />
+            <ArrowRight className={`w-4 sm:w-6 h-4 sm:h-6 ${isLessThan10Hours ? 'text-red-300 animate-pulse' : 'text-indigo-200 animate-pulse'}`} />
           </div>
         </div>
       </div>

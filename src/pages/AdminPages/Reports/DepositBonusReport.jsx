@@ -98,19 +98,19 @@ const dummyDepositBonuses = [
 ];
 
 const StatsCard = ({ title, value, textColor = "text-black", icon: Icon }) => (
-  <div className="sm:px-2 py-2 flex flex-col items-center sm:items-start justify-center gap-1 transform transition-all duration-300">
+  <div className="sm:px-2 py-1 sm:py-2 flex flex-col items-center sm:items-start justify-center gap-1 transform transition-all duration-300">
     <h3
-      className={`text-sm sm:text-base font-medium text-center tracking-wide ${textColor}`}
+      className={`text-[13px] sm:text-base font-medium text-center tracking-wide ${textColor}`}
     >
       {title}
     </h3>
-    <p className="text-xl font-bold text-center">{value}</p>
+    <p className="text-base sm:text-xl font-bold text-center">{value}</p>
   </div>
 );
 
 const ExportButton = ({ label, bgColor, shadow, onClick }) => (
   <button
-    className={`${bgColor} ${shadow} text-white px-4 py-1 text-xs sm:text-sm rounded-lg hover:opacity-90 cursor-pointer`}
+    className={`${bgColor} ${shadow} text-white px-2 sm:px-4 py-[2px] sm:py-1 text-xs sm:text-sm rounded-lg hover:opacity-90 cursor-pointer`}
     onClick={onClick}
   >
     {label}
@@ -394,7 +394,7 @@ const DepositBonus = () => {
         <main className="grow p-4 sm:p-6">
           <div className="max-w-full mx-auto">
             {/* Stats Cards */}
-            <div className="max-w-full px-2 rounded-xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1 mb-6 bg-white dark:bg-gray-800 shadow-lg">
+            <div className="max-w-full px-2 rounded-xl grid grid-cols-3 md:grid-cols-5 sm:gap-1 mb-4 sm:mb-6 bg-white dark:bg-gray-800 shadow-lg">
               <StatsCard
                 title="Total Entries"
                 value={stats.totalBonuses}
@@ -423,11 +423,11 @@ const DepositBonus = () => {
               />
             </div>
 
-            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-3 sm:px-4 py-6">
+            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-3 sm:px-4 pt-4 sm:pt-6 pb-3 sm:pb-6">
               {/* Header Section */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
-                  First Deposit Bonus - 25%
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h2 className="text-lg sm:text-2xl font-bold text-gray-800 dark:text-white">
+                  Daily XRP Bonus - 25%
                 </h2>
                 {/* Export Buttons */}
                 <ExportSection />
@@ -441,13 +441,13 @@ const DepositBonus = () => {
               )}
 
               {/* Date Filter */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg px-0 sm:px-4 py-4 mb-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg px-0 sm:px-4 py-2 sm:py-4 mb-4 sm:mb-6">
                 <div className="flex flex-col space-y-2">
                   {/* Filter Header */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <CalendarIcon className="w-5 h-5 text-blue-500" />
-                      <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                      <CalendarIcon className="w-4 sm:w-5 h-4 sm:h-5 text-blue-500" />
+                      <h3 className="text-[13px] sm:text-sm font-medium text-gray-700 dark:text-gray-200">
                         Date Filter
                       </h3>
                     </div>
@@ -460,7 +460,7 @@ const DepositBonus = () => {
                     </button>
                   </div>
 
-                  <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow-sm p-4">
+                  <div className="bg-gray-100 dark:bg-gray-900 rounded-lg shadow-sm p-2 sm:p-4">
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
@@ -476,22 +476,22 @@ const DepositBonus = () => {
               </div>
 
               {/* Filters */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-6">
-                <div className="flex-1 sm:col-span-2 min-w-[200px]">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pb-3 sm:pb-6">
+                <div className="flex-1 sm:col-span-2 sm:min-w-[200px]">
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Search by member name, ID, package..."
-                      className="w-full px-4 py-1 text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+                      placeholder="Search here..."
+                      className="w-full px-2 sm:px-4 py-[3px] sm:py-1 text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <Search className="absolute right-3 top-2 h-4 w-4 text-gray-400" />
+                    <Search className="absolute right-3 top-[7px] sm:top-2 h-4 w-4 text-gray-400" />
                   </div>
                 </div>
 
                 <select
-                  className="px-4 py-1 text-xs sm:text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+                  className="px-4 py-[3px] sm:py-1 text-xs sm:text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
                 >

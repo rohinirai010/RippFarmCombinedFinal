@@ -77,22 +77,23 @@ const navItems = [
     icon: <TbReport className="w-5 h-5" />,
     hasDropdown: true,
     children: [
-      { title: "First Deposit Bonus", path: "/anjo/deposit-bonus" },
-      { title: "Invitation Bonus", path: "/anjo/invitation-bonus" },
-      { title: "Level Bonus Report", path: "/anjo/level-bonus" },
-      { title: "Team Winning Bonus", path: "/anjo/team-winning-bonus" },
+      { title: "Daily XRP Bounty", path: "/anjo/daily-xrp-bonus" },
+      { title: "Direct Bounty", path: "/anjo/direct-bonus" },
+      { title: "User Network Bounty", path: "/anjo/level-bonus" },
+      { title: "Beyond Limit Bonus", path: "/anjo/beyond-limit-bonus" },
+      { title: "ODL Profit", path: "/anjo/odl-profit" },
     ],
   },
-  {
-    id: "bonanza",
-    title: "Bonanza",
-    icon: <MdOutlineCardGiftcard className="w-5 h-5" />,
-    hasDropdown: true,
-    children: [
-      { title: "Royalty Bonus", path: "/anjo/royalty-bonus" },
-      { title: "Special Reward", path: "/anjo/special-reward" },
-    ],
-  },
+  // {
+  //   id: "bonanza",
+  //   title: "Bonanza",
+  //   icon: <MdOutlineCardGiftcard className="w-5 h-5" />,
+  //   hasDropdown: true,
+  //   children: [
+  //     { title: "Royalty Bonus", path: "/anjo/royalty-bonus" },
+  //     { title: "Special Reward", path: "/anjo/special-reward" },
+  //   ],
+  // },
   {
     id: "setting",
     title: "Settings",

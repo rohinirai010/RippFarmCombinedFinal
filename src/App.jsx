@@ -47,7 +47,6 @@ import WithdrawalHistory from "./pages/AdminPages/Withdrawal/WithdrawalHistory.j
 import DepositBonus from "./pages/AdminPages/Reports/DepositBonusReport.jsx";
 import InvitationBonus from "./pages/AdminPages/Reports/InvitationBonus.jsx";
 import LevelBonus from "./pages/AdminPages/Reports/LevelBonus.jsx";
-import TeamWinningBonus from "./pages/AdminPages/Reports/TeamWinningBonus.jsx";
 import RoyaltyBonus from "./pages/AdminPages/Bonanza/RoyaltyBonus.jsx";
 import SpecialReward from "./pages/AdminPages/Bonanza/SpecialReward.jsx";
 import AdminLogin from "./pages/AdminPages/AdminLogin.jsx";
@@ -65,6 +64,9 @@ import BLBPage from "./pages/Account/BlbBonus/BlbPage.jsx";
 import FaqPage from "./pages/Account/HelpCenter/FaqPage.jsx";
 import OdlSetting from "./pages/AdminPages/Settings/OdlSetting.jsx";
 import LevelSetting from "./pages/AdminPages/Settings/LevelSetting.jsx";
+import OdlBonusReport from "./pages/Account/Reports/OdlBonusReport.jsx";
+import BlbBonus from "./pages/AdminPages/Reports/BlBBonus.jsx";
+import OdlProfit from "./pages/AdminPages/Reports/OdlProfit.jsx";
 
 function App() {
   const location = useLocation();
@@ -107,7 +109,7 @@ function App() {
         <Loader onLoaderComplete={handleLoaderComplete} />
       ) : (
         <Routes>
-          {/* ---------------------- Main Website Routes ---------------- */}
+          {/* ----------------------------- Main Website Routes -------------------------- */}
           <Route path="/" element={<Home />} />
           <Route path="/About" element={<About />} />
           <Route path="/Product" element={<Product />} />
@@ -120,7 +122,7 @@ function App() {
           <Route path="/Terms-of-use" element={<Termsofuse />} />
           <Route path="/Privacy-Policy" element={<PrivacyPolicy />} />
 
-          {/*---------------------- User Panel Routes -------------------------*/}
+          {/*-------------------------------- User Panel Routes ----------------------------------*/}
           <Route path="/user/register" element={<Register />} />
           <Route path="/user/welcome" element={<WelcomePage />} />
           <Route path="/user/login" element={<Login />} />
@@ -144,7 +146,6 @@ function App() {
             element={<AddressDetailPage />}
           />
 
-          {/* User Panel accounts --> Reports section routes */}
           <Route path="/user/report/bot-profit" element={<BotProfitPage />} />
           <Route
             path="/user/report/level-income"
@@ -158,13 +159,10 @@ function App() {
             element={<MyEarningReportPage />}
           />
 
-<Route
-            path="/user/account/blb-bonus"
-            element={<BLBPage />}
-          />
-          
+          <Route path="/user/report/odl-bonus" element={<OdlBonusReport />} />
 
-          {/* User Panel accounts --> transaction section routes */}
+          <Route path="/user/account/blb-bonus" element={<BLBPage />} />
+
           <Route
             path="/user/transaction/transaction-report"
             element={<TransactionReport />}
@@ -176,13 +174,11 @@ function App() {
           <Route path="/user/account/history" element={<MyHistory />} />
           <Route path="/user/account/capping" element={<CappingDetailPage />} />
 
-          {/* User Panel accounts --> Referral Program section routes */}
           <Route
             path="/user/referral/share-referral-link"
             element={<ReferralLink />}
           />
 
-          {/* User Panel accounts --> Referral Program section and help center routes */}
           <Route path="/user/account/helpdesk" element={<Helpdesk />} />
           <Route path="/user/account/faq" element={<FaqPage />} />
 
@@ -191,7 +187,7 @@ function App() {
           <Route path="/user/level" element={<LevelPage />} />
           <Route path="/user/packages" element={<LivePackagePage />} />
 
-          {/*--------------------------- admin routes ------------------------*/}
+          {/*------------------------------- admin routes -------------------------------*/}
           <Route exact path="/anjo/login" element={<AdminLogin />} />
           <Route
             path="/anjo/dashboard"
@@ -222,34 +218,27 @@ function App() {
           />
 
           {/* admin report routes */}
-          <Route exact path="/anjo/deposit-bonus" element={<DepositBonus />} />
           <Route
             exact
-            path="/anjo/invitation-bonus"
+            path="/anjo/daily-xrp-bonus"
+            element={<DepositBonus />}
+          />
+          <Route
+            exact
+            path="/anjo/direct-bonus"
             element={<InvitationBonus />}
           />
           <Route exact path="/anjo/level-bonus" element={<LevelBonus />} />
-          <Route
-            exact
-            path="/anjo/team-winning-bonus"
-            element={<TeamWinningBonus />}
-          />
+          <Route exact path="/anjo/beyond-limit-bonus" element={<BlbBonus />} />
+          <Route exact path="/anjo/odl-profit" element={<OdlProfit />} />
           <Route exact path="/anjo/royalty-bonus" element={<RoyaltyBonus />} />
           <Route
             exact
             path="/anjo/special-reward"
             element={<SpecialReward />}
           />
-           <Route
-            exact
-            path="/anjo/odl-setting"
-            element={<OdlSetting />}
-          />
-           <Route
-            exact
-            path="/anjo/level-setting"
-            element={<LevelSetting />}
-          />
+          <Route exact path="/anjo/odl-setting" element={<OdlSetting />} />
+          <Route exact path="/anjo/level-setting" element={<LevelSetting />} />
         </Routes>
       )}
     </Provider>

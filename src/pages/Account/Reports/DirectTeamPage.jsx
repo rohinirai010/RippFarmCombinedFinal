@@ -10,7 +10,7 @@ import Footer from '../../../partials/Footer';
 import { MdClose } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import headerLogo from "../../../images/sidebarLogoCollapsed.png"
-import {DatePicker, Dropdown, SearchInput, DataTable, BackgroundEffect,exportData as exportDataUtil } from "../../../partials/account/ReportsReusableComponents"
+import {DatePicker, Dropdown, SearchInput, DataTable, BackgroundEffect , exportData as exportDataUtil } from "../../../partials/account/ReportsReusableComponents"
 
 // Direct Team Page Component
 const DirectTeamPage = () => {

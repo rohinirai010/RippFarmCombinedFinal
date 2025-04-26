@@ -14,7 +14,7 @@ export const AnimatedCard = ({ children, delay = 0, className = "" }) => (
   );
   
  export const SectionTitle = ({ icon, title }) => (
-    <h3 className="text-base sm:text-xl font-bold flex items-center mb-3">
+    <h3 className="text-base sm:text-lg font-bold flex items-center mb-3">
       {React.cloneElement(icon, { size: 20, className: "mr-2 text-blue-400" })}
       <span className="text-gradient bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-500">
         {title}
@@ -37,7 +37,7 @@ export const AnimatedCard = ({ children, delay = 0, className = "" }) => (
  export const InfoRow = ({ label, value, isHighlighted = false, icon }) => (
     <div className="flex justify-between items-center px-3 py-1 sm:py-2 border-b border-gray-700 last:border-b-0">
       <span className="text-gray-300 text-sm sm:text-base flex items-center">
-        {icon && React.cloneElement(icon, { size: 14, className: "mr-1 text-blue-400" })}
+
         {label}
       </span>
       <span className={`font-medium text-sm sm:text-base ${isHighlighted ? 'text-blue-400' : 'text-white'}`}>
@@ -126,11 +126,11 @@ export const AnimatedCard = ({ children, delay = 0, className = "" }) => (
       whileHover={{ scale: 1.05 }}
       className={`${isHighlighted ? 'bg-gradient-to-r from-blue-500 to-blue-400' : 'bg-gradient-to-b from-[#0a1631] to-gray-900 border border-gray-700'} rounded-lg p-1 text-center shadow-glow`}
     >
-      <p className={`text-xs ${isHighlighted ? 'text-white' : 'text-gray-300'} font-medium`}>{title}</p>
+      <p className={`text-[11px] sm:text-xs ${isHighlighted ? 'text-white' : 'text-gray-300'} font-medium`}>{title}</p>
       <motion.h4 
         animate={animate ? { scale: [1, 1.1, 1] } : {}}
         transition={animate ? { duration: 2, repeat: Infinity } : {}}
-        className={`${isHighlighted ? 'text-white' : 'text-white'} font-bold text-sm sm:text-lg`}
+        className={`${isHighlighted ? 'text-white' : 'text-white'} font-bold text-[13px] sm:text-lg`}
       >
         {value}
       </motion.h4>
@@ -145,7 +145,7 @@ export const AnimatedCard = ({ children, delay = 0, className = "" }) => (
     const rotate = useTransform(x, [0, 240], [0, 90]);
   
     const handleDragEnd = (event, info) => {
-      if (info.offset.x >= 240) {
+      if (info.offset.x >= 80) {
         setIsComplete(true);
         onSwipeComplete();
         
@@ -161,7 +161,7 @@ export const AnimatedCard = ({ children, delay = 0, className = "" }) => (
     };
   
     return (
-      <div className="mt-auto px-10 sm:px-4 py-3">
+      <div className="mt-6 px-10 sm:px-4 py-3">
         <motion.div 
           className="relative max-w-xs sm:max-w-sm mx-auto h-12 sm:h-14 border border-blue-500 bg-[#0a1631] backdrop-blur-sm rounded-full overflow-hidden shadow-lg shadow-blue-500/20"
           whileHover={{ boxShadow: "0 0 20px rgba(59,130,246,0.3)" }}

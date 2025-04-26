@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import userLoginLogo from "../../images/sidebarLogoCollapsed.png";
+import { IoMdArrowRoundDown } from "react-icons/io";
 
 // Reusable components for visual enhancements
 const AnimatedStar = ({ size, delay, position }) => (
@@ -219,8 +220,8 @@ export default function PackageStartPage() {
         </div>
         
         {/* Decorative stars */}
-        <AnimatedStar size="lg" delay={0} position="top-16 right-6" />
-        <AnimatedStar size="md" delay={0.5} position="top-32 right-16" />
+        <AnimatedStar size="lg" delay={0} position="top-6 right-6" />
+        <AnimatedStar size="md" delay={0.5} position="top-16 right-16" />
         <AnimatedStar size="sm" delay={1} position="top-48 left-14" />
         <AnimatedStar size="sm" delay={1.5} position="bottom-64 right-24" />
         
@@ -241,9 +242,29 @@ export default function PackageStartPage() {
           transition={{ duration: 3, repeat: Infinity }}
         />
       </div>
+
+         {/* Header */}
+         <motion.header className="top-0 left-0 z-30 transition-all duration-300">
+                <div className="px-4 sm:px-6 pt-6 pb-4 sm:pb-6 flex justify-between items-center">
+                  <div className="flex items-center">
+                    <motion.button
+                      onClick={() => navigate("/user/packages")}
+                      className="mr-4 bg-[#070d25]/80 p-2 rounded-lg border border-blue-500/20"
+                      whileHover={{ scale: 1.1, rotate: -5 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <IoMdArrowRoundDown className="text-xl transform rotate-90 text-blue-400" />
+                    </motion.button>
+                    <h1 className="text-lg sm:text-xl font-bold text-blue-400">
+                      Get Started
+                    </h1>
+                  </div>
+                </div>
+              </motion.header>
       
       {/* Content Container */}
-      <div className="relative min-h-screen flex flex-col items-center justify-between z-10 py-8 px-4">
+      <div className="relative min-h-screen flex flex-col items-center gap-4 z-10  px-4">
+
         {/* Corner glows */}
         <CornerGlow position="top-0 left-0" />
         <CornerGlow position="bottom-0 right-0" delay={1.25} />

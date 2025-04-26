@@ -236,7 +236,7 @@ const LevelPage = () => {
 
       {/* Tier Card */}
       <div
-        className={`fixed top-60 sm:top-74 left-0 right-0 max-w-xl mx-auto bg-[#04101e] rounded-t-[2rem] sm:rounded-t-[3rem] shadow-xl border-t  transition-all duration-500 ease-in-out mb-30 sm:mb-36 
+        className={`fixed top-60 sm:top-74 left-0 right-0 max-w-xl mx-auto bg-[#04101e] rounded-t-[2rem] sm:rounded-t-[3rem] shadow-xl border-t  transition-all duration-500 ease-in-out  ${activePackageType === "legacyVault" ? "mb-20" : "mb-30 sm:mb-36"} 
         `}
         style={{
           bottom: 0,

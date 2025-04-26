@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import React, { useRef, useState, useEffect } from "react";
 
 const CustomRangeSlider = ({
@@ -12,9 +13,28 @@ const CustomRangeSlider = ({
   const [isDragging, setIsDragging] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [exceedsBalance, setExceedsBalance] = useState(false);
+  const [inputValue, setInputValue] = useState(value.toString());
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+
+
+  // Format numbers with thousands separators
+  const formatNumber = (num) => {
+    return parseFloat(num).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
 
   // Calculate percentage for styling
   const percentage = ((value - min) / (max - min)) * 100;
+
+  // Update input value when external value changes
+  useEffect(() => {
+    if (!isInputFocused) {
+      setInputValue(value.toString());
+    }
+  }, [value, isInputFocused]);
 
   // Calculate value from mouse/touch position with 10x increments
   const calculateValueFromPosition = (clientX) => {
@@ -116,8 +136,67 @@ const CustomRangeSlider = ({
     };
   }, [isDragging, onChange, min, max]); 
 
+  const handleInputChange = (e) => {
+    const newValue = e.target.value;
+    
+    // Allow empty string for input
+    if (newValue === '') {
+      setInputValue('');
+      return;
+    }
+    
+    // Only accept numbers
+    if (!/^\d*$/.test(newValue)) {
+      return;
+    }
+    
+    setInputValue(newValue);
+  };
+
+  const handleInputBlur = () => {
+    setIsInputFocused(false);
+    
+    // Convert to number and validate
+    let numValue = parseInt(inputValue, 10);
+    
+    // If input is empty or NaN, reset to current value
+    if (isNaN(numValue)) {
+      setInputValue(value.toString());
+      return;
+    }
+    
+    // Ensure within min/max bounds
+    numValue = Math.max(min, Math.min(max, numValue));
+    
+    // Update both local input and parent state
+    setInputValue(numValue.toString());
+    onChange(numValue);
+  };
+
+  const handleInputFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleInputBlur();
+    }
+  };
+
+  const handleIncrement = () => {
+    // Increment by 10 to match slider behavior
+    const newValue = Math.min(max, value + 10);
+    onChange(newValue);
+  };
+
+  const handleDecrement = () => {
+    // Decrement by 10 to match slider behavior
+    const newValue = Math.max(min, value - 10);
+    onChange(newValue);
+  };
+
   return (
-    <div className="my-5 sm:my-6">
+    <div className="mt-5 mb-2">
       <div 
         ref={sliderContainerRef}
         className="relative h-2 bg-gray-800 rounded-full cursor-pointer"
@@ -149,7 +228,7 @@ const CustomRangeSlider = ({
 
         {/* Slider Thumb */}
         <div
-          className={`absolute w-4 sm:w-6 h-4 sm:h-6 rounded-full shadow-lg transform -translate-x-1/2 -translate-y-1/2 cursor-grab ${
+          className={`absolute w-5 sm:w-6 h-5 sm:h-6 rounded-full shadow-xl border-2 border-blue-300 transform -translate-x-1/2 -translate-y-1/2 cursor-grab ${
             isDragging ? 'cursor-grabbing scale-110' : ''
           } ${
             exceedsBalance 
@@ -194,6 +273,70 @@ const CustomRangeSlider = ({
         <span className="text-xs text-gray-400">{formatValue(min)}</span>
         <span className="text-xs text-gray-400 ml-auto">{formatValue(max)}</span>
       </div>
+
+      <div className="flex flex-row  justify-between mt-2">
+
+      {/* Custom Input  */}
+      <div className="mt-2 flex flex-col ">
+      <p className="text-xs sm:text-base text-gray-400">
+                  Bot Activation Amount
+                </p>
+                <div className="mt-1 flex  items-center">
+
+        <button 
+          onClick={handleDecrement}
+          className={`flex items-center justify-center w-4 sm:w-8 h-6 sm:h-8 rounded-l-lg ${
+            value <= min 
+              ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          }`}
+          disabled={value <= min}
+        >
+          <span className="text-base sm:text-xl font-bold">−</span>
+        </button>
+        
+        <div className="relative flex-1">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            onFocus={handleInputFocus}
+            onKeyPress={handleKeyPress}
+            className={`w-[6rem] sm:w-full h-6 sm:h-8 px-2 sm:px-3 py-1 text-center text-white bg-gray-800 border-y ${
+              exceedsBalance ? 'border-red-500' : 'border-blue-600'
+            } focus:outline-none focus:ring-2 ${
+              exceedsBalance 
+                ? 'focus:ring-red-500/30' 
+                : 'focus:ring-blue-500/30'
+            }`}
+          />
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
+            $
+          </div>
+        </div>
+        
+        <button 
+          onClick={handleIncrement}
+          className={`flex items-center justify-center w-4 sm:w-8 h-6 sm:h-8 rounded-r-lg ${
+            value >= max 
+              ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          }`}
+          disabled={value >= max}
+        >
+          <span className="text-base sm:text-xl font-bold">+</span>
+        </button>
+                </div>
+      </div>
+      <div className="flex text-[11px] sm:text-sm ">
+                <span className="text-gray-400 flex items-center">
+                  <Info size={12} className="mr-1" />
+                  Available: $ {formatNumber(walletBalance)}
+                </span>
+              </div>
+      </div>
+      
     </div>
   );
 };

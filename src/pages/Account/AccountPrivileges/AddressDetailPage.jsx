@@ -8,8 +8,8 @@ import {
   verifyAddress,
 } from "../../../ReduxStateManagement/slices/addressSlice";
 import { RxLapTimer } from "react-icons/rx";
-import usdtImg from "../../../images/usdtImg.svg"
-import xrpImg from "../../../images/xrpImg.svg"
+import usdtImg from "../../../images/usdtImg.svg";
+import xrpImg from "../../../images/xrpImg.svg";
 
 const AddressDetailPage = () => {
   const navigate = useNavigate();
@@ -18,8 +18,19 @@ const AddressDetailPage = () => {
   // Get addresses from Redux store
   const addresses = useSelector((state) => state.addresses.addresses);
 
-  // State for new addresses being added
+  // State for new addresses
   const [newAddresses, setNewAddresses] = useState({
+    usdt: "",
+    xrp: "",
+  });
+
+  const [editingAddress, setEditingAddress] = useState({
+    usdt: false,
+    xrp: false,
+  });
+
+  // State for validation errors
+  const [addressErrors, setAddressErrors] = useState({
     usdt: "",
     xrp: "",
   });
@@ -74,9 +85,69 @@ const AddressDetailPage = () => {
       ...newAddresses,
       [type]: value,
     });
+
+    // Clear error when user starts typing
+    if (addressErrors[type]) {
+      setAddressErrors({
+        ...addressErrors,
+        [type]: "",
+      });
+    }
+  };
+
+  const validateAddress = (type, address) => {
+    if (!address || address.length < 20) {
+      const errorMessage =
+        type === "usdt"
+          ? "Please add correct BEP20 Address (min characters above 20)"
+          : "Please add correct XRP Address (min characters above 20)";
+
+      setAddressErrors({
+        ...addressErrors,
+        [type]: errorMessage,
+      });
+      return false;
+    }
+    return true;
   };
 
   const handleAddAddress = (type) => {
+    // Check if this is a fee-required change that was previously confirmed
+    const requiresFee =
+      addressToChange === type && addresses[type]?.changeCount >= 3;
+
+    // If not editing and there's already a verified address, enable edit mode
+    if (
+      !editingAddress[type] &&
+      addresses[type]?.address &&
+      addresses[type]?.isVerified
+    ) {
+      // Before enabling edit mode, check if this would exceed the free changes limit
+      if (addresses[type]?.changeCount >= 3 && !requiresFee) {
+        setAddressToChange(type);
+        setShowFeeWarning(true);
+        return;
+      }
+
+      setEditingAddress({
+        ...editingAddress,
+        [type]: true,
+      });
+      return;
+    }
+
+    // Validate address first
+    if (!validateAddress(type, newAddresses[type])) {
+      return;
+    }
+
+    // If this change requires a fee and the user hasn't confirmed yet
+    if (addresses[type]?.changeCount >= 3 && !requiresFee) {
+      setAddressToChange(type);
+      setShowFeeWarning(true);
+      return;
+    }
+
     // First address can always be added
     if (!addresses[type]?.address) {
       submitAddress(type);
@@ -88,14 +159,18 @@ const AddressDetailPage = () => {
       return; // Can't change an address that's still being verified
     }
 
-    // Check if address has been changed 3 times already
-    if (addresses[type]?.changeCount >= 3) {
-      setAddressToChange(type);
-      setShowFeeWarning(true);
-      return;
+    submitAddress(type);
+
+    // Reset address to change if this was the one requiring a fee
+    if (addressToChange === type) {
+      setAddressToChange(null);
     }
 
-    submitAddress(type);
+    // Reset editing state
+    setEditingAddress({
+      ...editingAddress,
+      [type]: false,
+    });
   };
 
   const submitAddress = (type) => {
@@ -112,21 +187,72 @@ const AddressDetailPage = () => {
       ...newAddresses,
       [type]: "",
     });
+
+    // Reset editing state
+    setEditingAddress({
+      ...editingAddress,
+      [type]: false,
+    });
+  };
+
+  const cancelEditing = (type) => {
+    setEditingAddress({
+      ...editingAddress,
+      [type]: false,
+    });
+    setNewAddresses({
+      ...newAddresses,
+      [type]: "",
+    });
   };
 
   const confirmAddressChange = () => {
     if (addressToChange) {
-      // Deduct $1 from wallet 
-      // For now, just added the address
-      submitAddress(addressToChange);
+      // If the user has already entered a new address in the input field
+      if (
+        newAddresses[addressToChange] &&
+        newAddresses[addressToChange].length > 0
+      ) {
+        // Validate address first
+        if (!validateAddress(addressToChange, newAddresses[addressToChange])) {
+          return;
+        }
+
+        // Here, you would implement the actual fee deduction logic
+        console.log("$1 fee deducted for address change");
+
+        // Submit the address change
+        submitAddress(addressToChange);
+      } else {
+        // If no address was entered yet, enable editing mode for this address
+        setEditingAddress({
+          ...editingAddress,
+          [addressToChange]: true,
+        });
+      }
+
+      // Close the modal
       setShowFeeWarning(false);
-      setAddressToChange(null);
     }
   };
 
   const cancelAddressChange = () => {
     setShowFeeWarning(false);
     setAddressToChange(null);
+
+    // Also reset editing state for the address
+    if (addressToChange) {
+      setEditingAddress({
+        ...editingAddress,
+        [addressToChange]: false,
+      });
+
+      // Reset the input field
+      setNewAddresses({
+        ...newAddresses,
+        [addressToChange]: "",
+      });
+    }
   };
 
   const formatRemainingTime = (type) => {
@@ -173,7 +299,7 @@ const AddressDetailPage = () => {
             <span className="text-xl font-bold">USDT BEP 20</span>
           </div>
 
-          {addresses.usdt?.address ? (
+          {addresses.usdt?.address && !editingAddress.usdt ? (
             <div className="">
               <div className="bg-[#08062d] p-3 rounded-3xl flex justify-between items-center">
                 <div className="truncate pr-2">{addresses.usdt.address}</div>
@@ -226,14 +352,30 @@ const AddressDetailPage = () => {
                   placeholder="Enter USDT BEP 20 address"
                   className="bg-transparent border-none outline-none w-full withdraw-input"
                 />
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 sm:px-10 py-1 sm:py-2 rounded-full ml-2"
-                  onClick={() => handleAddAddress("usdt")}
-                  disabled={!newAddresses.usdt}
-                >
-                  Add
-                </button>
+
+                <div className="flex">
+                  {editingAddress.usdt && (
+                    <button
+                      className="bg-gray-500 hover:bg-gray-600 text-white text-sm px-3 py-[3px] sm:py-1 rounded-full mr-2"
+                      onClick={() => cancelEditing("usdt")}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                  <button
+                    className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-6 sm:px-5 py-[3px] sm:py-1 rounded-full"
+                    onClick={() => handleAddAddress("usdt")}
+                    disabled={!newAddresses.usdt}
+                  >
+                    {editingAddress.usdt ? "Save" : "Add"}
+                  </button>
+                </div>
               </div>
+              {addressErrors.usdt && (
+                <div className="text-red-500 mt-2 pl-2">
+                  {addressErrors.usdt}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -241,13 +383,13 @@ const AddressDetailPage = () => {
         {/* XRP Address Section */}
         <div className="w-full bg-gray-800/40 rounded-2xl border border-blue-400 px-2 sm:px-4 pb-4  mb-10 relative">
           <div className="flex items-center">
-          <div className="relative -top-6 sm:-top-8 w-18 sm:w-22 h-18 sm:h-22  flex items-center justify-center mr-3">
+            <div className="relative -top-6 sm:-top-8 w-18 sm:w-22 h-18 sm:h-22  flex items-center justify-center mr-3">
               <img src={xrpImg} alt="xrp Image" />
             </div>
             <span className="text-xl font-bold">XRP (Ledger)</span>
           </div>
 
-          {addresses.xrp?.address ? (
+          {addresses.xrp?.address && !editingAddress.xrp ? (
             <div className="">
               <div className="bg-[#07062d] p-3 rounded-3xl flex justify-between items-center">
                 <div className="truncate pr-2">{addresses.xrp.address}</div>
@@ -300,14 +442,29 @@ const AddressDetailPage = () => {
                   placeholder="Enter XRP Ledger address"
                   className="bg-transparent border-none outline-none w-full withdraw-input"
                 />
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 sm:px-10 py-1 sm:py-2 rounded-full ml-2"
-                  onClick={() => handleAddAddress("xrp")}
-                  disabled={!newAddresses.xrp}
-                >
-                  Add
-                </button>
+               <div className="flex">
+                  {editingAddress.xrp && (
+                    <button
+                      className="bg-gray-500 hover:bg-gray-600 text-white text-sm px-3 py-[3px] sm:py-1 rounded-full mr-2"
+                      onClick={() => cancelEditing("xrp")}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                  <button
+                    className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-6 sm:px-5 py-[3px] sm:py-1 rounded-full"
+                    onClick={() => handleAddAddress("xrp")}
+                    disabled={!newAddresses.xrp}
+                  >
+                    {editingAddress.xrp ? "Save" : "Add"}
+                  </button>
+                </div>
               </div>
+              {addressErrors.xrp && (
+                <div className="text-red-500 mt-2 pl-2">
+                  {addressErrors.xrp}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -322,23 +479,25 @@ const AddressDetailPage = () => {
 
         {/* Fee Warning Modal */}
         {showFeeWarning && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-            <div className="bg-gray-800 p-6 rounded-lg max-w-sm w-full">
-              <h3 className="text-xl font-bold mb-4">Address Change Fee</h3>
-              <p className="mb-6">
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs bg-opacity-75 flex items-center justify-center z-50 max-w-xl mx-auto">
+            <div className="bg-gray-800 p-4 sm:p-6 rounded-lg max-w-sm w-full m-3">
+              <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-4">
+                Address Change Fee
+              </h3>
+              <p className="mb-4 sm:mb-6 text-sm sm:text-base">
                 You have already changed this address 3 times. Additional
                 changes will incur a $1 fee from your Withdrawal Wallet. Do you
                 want to continue?
               </p>
               <div className="flex justify-end gap-3">
                 <button
-                  className="px-4 py-2 bg-gray-700 rounded-md"
+                  className="px-3 sm:px-4 py-[6px] sm:py-2 text-sm sm:text-base bg-gray-700 rounded-md"
                   onClick={cancelAddressChange}
                 >
                   Cancel
                 </button>
                 <button
-                  className="px-4 py-2 bg-blue-500 rounded-md"
+                  className="px-3 sm:px-4 py-[6px] sm:py-2 text-sm sm:text-base bg-blue-500 rounded-md"
                   onClick={confirmAddressChange}
                 >
                   Pay $1 and Change

@@ -9,7 +9,6 @@ import {
   DollarSign,
   Bell,
   PlusCircle,
-  UserCheck,
   FileText,
   Shield,
   MessageSquare,
@@ -20,6 +19,7 @@ import "../../css/additional.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   AlertCard,
+  CappingAlertCard,
   IncomeOverviewDashboard,
   LiveActivityFeed,
   PerformanceEngagementSection,
@@ -27,6 +27,7 @@ import {
   SystemSummaryCard,
   WithdrawalDepositStats,
 } from "../../partials/AdminPartials/dashboard/Components";
+import { PiHandDepositDuotone, PiHandWithdrawDuotone } from "react-icons/pi";
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -202,10 +203,10 @@ const AdminDashboard = () => {
 
                 <Link to="/registrations" className="block">
                   <SystemSummaryCard
-                    title="New Registrations Today"
-                    value="86"
+                    title="Total Withdrawals"
+                    value="1000"
                     icon={
-                      <UserCheck
+                      <PiHandWithdrawDuotone
                         size={20}
                         className="text-blue-600 dark:text-blue-400"
                       />
@@ -217,10 +218,10 @@ const AdminDashboard = () => {
 
                 <Link to="/packages" className="block">
                   <SystemSummaryCard
-                    title="Total Packages Activated"
-                    value="9,876"
+                    title="Total Deposits"
+                    value="1000"
                     icon={
-                      <FileText
+                      <PiHandDepositDuotone
                         size={20}
                         className="text-purple-600 dark:text-purple-400"
                       />
@@ -231,8 +232,8 @@ const AdminDashboard = () => {
 
                 <Link to="/wallet" className="block">
                   <SystemSummaryCard
-                    title="System Wallet Balance"
-                    value="$1,245,890"
+                    title="Total Payouts"
+                    value="1000"
                     icon={
                       <DollarSign
                         size={20}
@@ -290,17 +291,18 @@ const AdminDashboard = () => {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Main Content Area - Dynamic Components */}
+                {/* Main Content Area  */}
                 <div className="lg:col-span-2 space-y-4">
                   <IncomeOverviewDashboard />
                   <WithdrawalDepositStats />
                   <PerformanceEngagementSection />
                 </div>
 
-                {/* Right Sidebar */}
+                {/* Right Side cards */}
                 <div className="lg:col-span-1 space-y-3">
                   <SystemControlsCard />
                   <LiveActivityFeed activities={recentActivities} />
+                  <CappingAlertCard />
                 </div>
               </div>
             </div>

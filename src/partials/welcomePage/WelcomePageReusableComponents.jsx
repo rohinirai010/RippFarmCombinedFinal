@@ -167,6 +167,8 @@ export const AnimatedStar = ({ size, delay, position, isRotated = false }) => (
   
   // ProfileData Component 
   export const ProfileData = ({ user }) => {
+    const [copiedField, setCopiedField] = useState(null);
+    
     const profileData = useMemo(() => {
       return {
         'Username': user.username,
@@ -183,6 +185,23 @@ export const AnimatedStar = ({ size, delay, position, isRotated = false }) => (
       };
     }, [user]);
     
+    const copyToClipboard = (label, text) => {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          
+          setCopiedField(label);
+          
+          setTimeout(() => {
+            setCopiedField(null);
+          }, 2000);
+          
+          console.log('Copied to clipboard!');
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+    };
+    
     return (
       <>
         {Object.entries(profileData)
@@ -195,7 +214,7 @@ export const AnimatedStar = ({ size, delay, position, isRotated = false }) => (
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 + (index * 0.1) }}
             >
-              {/* Subtle highlight sweep animation - reduced animation complexity */}
+              {/* Subtle highlight sweep animation */}
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent"
                 initial={{ x: -200, opacity: 0 }}
@@ -211,24 +230,80 @@ export const AnimatedStar = ({ size, delay, position, isRotated = false }) => (
               />
               
               <span className="text-sm sm:text-base text-gray-300">{label}</span>
-              <motion.span 
-                className="text-sm sm:text-base font-medium"
-                initial={{ opacity: 0 }}
-                animate={{ 
-                  opacity: 1,
-                  color: [
-                    "rgb(191, 219, 254)", // Light blue
-                    "rgb(255, 255, 255)", // White
-                    "rgb(191, 219, 254)"  // Back to light blue
-                  ]
-                }}
-                transition={{ 
-                  opacity: { duration: 0.3, delay: 0.5 + (index * 0.12) },
-                  color: { delay: 0.5 + (index * 0.12), duration: 2.5 }
-                }}
-              >
-                {value}
-              </motion.span>
+              <div className="flex items-center gap-[6px]">
+                <motion.span 
+                  className="text-sm sm:text-base font-medium"
+                  initial={{ opacity: 0 }}
+                  animate={{ 
+                    opacity: 1,
+                    color: [
+                      "rgb(191, 219, 254)", // Light blue
+                      "rgb(255, 255, 255)", // White
+                      "rgb(191, 219, 254)"  // Back to light blue
+                    ]
+                  }}
+                  transition={{ 
+                    opacity: { duration: 0.3, delay: 0.5 + (index * 0.12) },
+                    color: { delay: 0.5 + (index * 0.12), duration: 2.5 }
+                  }}
+                >
+                  {value}
+                </motion.span>
+                
+                {/* Copy icon for username and password only */}
+                {(label === 'Username' || label === 'Password') && (
+                  <motion.button
+                    onClick={() => copyToClipboard(label, value)}
+                    className=" text-blue-300 hover:text-blue-100 focus:outline-none  z-80"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ duration: 0.2 }}
+                    aria-label={`Copy ${label}`}
+                    title={`Copy ${label}`}
+                  >
+                    {copiedField === label ? (
+                      /* icon when copied */
+                      <motion.svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="16" 
+                        height="16" 
+                        viewBox="0 0 24 24" 
+                        fill="currentColor" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1.2 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                        {/*  checkmark to show success */}
+                        <path d="M16 14l2 2 4-4" strokeWidth="2" stroke="#000" fill="none"></path>
+                      </motion.svg>
+                    ) : (
+                      /* Outline copy icon when not copied */
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="16" 
+                        height="16" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                      >
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                      </svg>
+                    )}
+                  </motion.button>
+                )}
+              </div>
             </motion.div>
           ))}
       </>
@@ -244,13 +319,13 @@ export const SwipeButton = ({ onSwipeComplete }) => {
     const rotate = useTransform(x, [0, 240], [0, 90]);
   
     const handleDragEnd = (event, info) => {
-      if (info.offset.x >= 240) {
+      if (info.offset.x >= 80) {
         onSwipeComplete();
       }
     };
   
     return (
-      <div className="relative mb-8 mt-8">
+      <div className="relative mb-8 mt-4">
         {/* Main button container */}
         <motion.div
           className="relative w-[80%]  sm:max-w-sm mx-auto h-14 sm:h-16 border-2 border-blue-500 bg-gradient-to-r from-[#020424] to-[#0a1a4d] backdrop-blur-sm rounded-full overflow-hidden shadow-lg shadow-blue-500/30"
@@ -304,7 +379,7 @@ export const SwipeButton = ({ onSwipeComplete }) => {
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              SWIPE TO CONTINUE
+              SWIPE TO DASHBBOARD
             </motion.div>
           </div>
   
@@ -376,29 +451,7 @@ export const SwipeButton = ({ onSwipeComplete }) => {
           />
         </motion.div>
   
-        {/* Pulsating instruction text */}
-        <motion.div 
-          className="absolute -bottom-8 left-0 right-0 flex justify-center"
-          animate={{
-            y: [0, -2, 0],
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <motion.p
-            className="text-center text-xs tracking-wide text-blue-400"
-            animate={{ 
-              opacity: [0.7, 1, 0.7],
-              textShadow: [
-                "0 0 4px rgba(59,130,246,0.3)",
-                "0 0 8px rgba(59,130,246,0.5)",
-                "0 0 4px rgba(59,130,246,0.3)"
-              ]
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            Slide to access your dashboard
-          </motion.p>
-        </motion.div>
       </div>
     );
   };
+

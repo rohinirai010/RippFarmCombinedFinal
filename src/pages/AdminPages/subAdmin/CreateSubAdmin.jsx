@@ -6,10 +6,11 @@ import OverallCommonTable from "../../../components/OverallCommonTable";
 import ConfirmationDialog from "../../../components/ConfirmationDialog";
 
 import { dummySubAdmins, roleOptions, permissionOptions } from "../../../utils/SubAdminDummyData.js";
+import { GiCancel } from "react-icons/gi";
 
 // Reusable components
 const StatsCard = ({ title, value, textColor = "text-black" }) => (
-  <div className="sm:px-4 py-4 flex flex-col items-center sm:items-start justify-center gap-1">
+  <div className="sm:px-4 py-2 sm:py-4 flex flex-col items-center sm:items-start justify-center gap-1">
     <div className="flex items-center gap-2">
     
       <h3 className={`text-sm sm:text-base font-medium tracking-wide ${textColor}`}>
@@ -70,12 +71,12 @@ const SearchBox = ({ value, onChange }) => (
   <div className="relative">
     <input
       type="text"
-      placeholder="Search by name, email, role..."
-      className="w-full px-4 py-2 text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+      placeholder="Search here.."
+      className="w-full px-2 sm:px-4 py-2 text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
       value={value}
       onChange={(e) => onChange(e.target.value)}
     />
-    <Search className="absolute right-3 top-2 h-4 w-4 text-gray-400" />
+    <Search className="absolute right-3 top-3 sm:top-2 h-4 w-4 text-gray-400" />
   </div>
 );
 
@@ -396,7 +397,7 @@ const CreateSubAdmin = () => {
         <main className="grow p-4 sm:p-6">
           <div className="max-w-full mx-auto">
             {/* Stats Cards */}
-            <div className=" max-w-full sm:max-w-xs px-2 rounded-xl grid grid-cols-3   mb-6 bg-white dark:bg-gray-800  shadow-lg">
+            <div className=" max-w-full sm:max-w-xs px-2 rounded-xl grid grid-cols-3  mb-4 sm:mb-6 bg-white dark:bg-gray-800  shadow-lg">
               <StatsCard
                 title="Total"
                 value={stats.totalSubAdmins}
@@ -420,15 +421,18 @@ const CreateSubAdmin = () => {
             <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-3 sm:px-4 py-6">
               {/* Header Section */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
+                <h2 className="text-lg sm:text-2xl font-bold text-gray-800 dark:text-white">
                   Manage Sub-Administrators
                 </h2>
                 
                 <button
                   onClick={toggleForm}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-colors"
+                  className={`flex items-center gap-2 px-2 sm:px-4 py-1 sm:py-2  rounded-lg shadow-md text-white  transition-colors ${showForm ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"}`}
                 >
-                  <PlusCircle className="w-5 h-5" />
+                  {
+                    showForm ? <GiCancel className="w-4 sm:w-5 h-4 sm:h-5" /> : <PlusCircle className="w-4 sm:w-5 h-4 sm:h-5" />
+                  }
+                  
                   {showForm ? "Cancel" : "Create Sub-Admin"}
                 </button>
               </div>
@@ -579,8 +583,8 @@ const CreateSubAdmin = () => {
               )}
 
               {/* Filters */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-                <div className="flex-1 sm:col-span-2 min-w-[200px]">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+                <div className="flex-1 sm:col-span-2 sm:min-w-[200px]">
                   <SearchBox value={searchTerm} onChange={setSearchTerm} />
                 </div>
 

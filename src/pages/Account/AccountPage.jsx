@@ -89,8 +89,8 @@ const AccountPage = () => {
   };
 
   const copyReferralId = () => {
-    if (user && user.username) {
-      navigator.clipboard.writeText(user.username);
+    if (user && user.sponsorId) {
+      navigator.clipboard.writeText(user.sponsorId);
 
       showNotification("Referral ID copied to clipboard!");
     }
@@ -367,7 +367,7 @@ const AccountPage = () => {
             <MenuCard
               icon={GiBottleCap}
               label="Capping"
-              onClick={() => navigate("/user/transaction/capping")}
+              onClick={() => navigate("/user/account/capping")}
             />
           </div>
         </div>
@@ -452,9 +452,7 @@ const AccountPage = () => {
 
       {/* Footer with animation */}
       <motion.div
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
+        
         className="z-10"
       >
         <Footer activeTab={activeTab} setActiveTab={setActiveTab} />

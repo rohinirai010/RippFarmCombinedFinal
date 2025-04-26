@@ -1,11 +1,5 @@
 import React, { useState, useMemo } from "react";
-import {
-  Search,
-  Users,
-  CheckCircle,
-  XCircle,
-  Clock,
-} from "lucide-react";
+import { Search, Users, CheckCircle, XCircle, Clock } from "lucide-react";
 import Header from "../../../partials/AdminPartials/Header";
 import Sidebar from "../../../partials/AdminPartials/Sidebar";
 import OverallCommonTable from "../../../components/OverallCommonTable";
@@ -21,13 +15,13 @@ import {
 import PaymentProofViewer from "../../../partials/AdminPartials/deposit/PaymentProofViewer";
 
 const StatsCard = ({ title, value, textColor = "text-black", icon: Icon }) => (
-  <div className="p-2 flex flex-col items-center sm:items-start justify-center gap-1 transform transition-all duration-300">
+  <div className="p-1 sm:p-2 flex flex-col items-center sm:items-start justify-center gap-1 transform transition-all duration-300">
     <h3
-      className={`text-base font-medium text-center tracking-wide ${textColor}`}
+      className={`text-[13px] sm:text-base font-medium text-center tracking-wide ${textColor}`}
     >
       {title}
     </h3>
-    <p className="text-2xl font-bold text-center">{value}</p>
+    <p className="text-[17px] sm:text-2xl font-bold text-center">{value}</p>
   </div>
 );
 
@@ -85,18 +79,17 @@ const DepositHistory = () => {
     },
   ]);
 
-
   //for approval/rejection
   const handleStatusUpdate = (id, newStatus) => {
-    const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    setData(prevData =>
-      prevData.map(item => {
+    const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+    setData((prevData) =>
+      prevData.map((item) => {
         if (item.id === id) {
           return {
             ...item,
             status: newStatus,
-            approvedDate: newStatus === 'Approved' ? now : item.approvedDate,
-            rejectDate: newStatus === 'Rejected' ? now : item.rejectDate,
+            approvedDate: newStatus === "Approved" ? now : item.approvedDate,
+            rejectDate: newStatus === "Rejected" ? now : item.rejectDate,
           };
         }
         return item;
@@ -105,12 +98,12 @@ const DepositHistory = () => {
   };
 
   const handleRemarkUpdate = (id, remark) => {
-    setData(prevData =>
-      prevData.map(item => {
+    setData((prevData) =>
+      prevData.map((item) => {
         if (item.id === id) {
           return {
             ...item,
-            remark: remark
+            remark: remark,
           };
         }
         return item;
@@ -119,12 +112,15 @@ const DepositHistory = () => {
   };
 
   // Stats calculation
-  const stats = useMemo(() => ({
-    totalRequests: data.length,
-    approved: data.filter((item) => item.status === "Approved").length,
-    pending: data.filter((item) => item.status === "Pending").length,
-    rejected: data.filter((item) => item.status === "Rejected").length,
-  }), [data]);
+  const stats = useMemo(
+    () => ({
+      totalRequests: data.length,
+      approved: data.filter((item) => item.status === "Approved").length,
+      pending: data.filter((item) => item.status === "Pending").length,
+      rejected: data.filter((item) => item.status === "Rejected").length,
+    }),
+    [data]
+  );
 
   const columns = [
     { key: "srNo", label: "Sr No" },
@@ -138,23 +134,23 @@ const DepositHistory = () => {
           <PaymentProofViewer
             document={row.paymentProof}
             status={row.status}
-            onApprove={() => handleStatusUpdate(row.id, 'Approved')}
-            onReject={(remark) => {  
-              handleStatusUpdate(row.id, 'Rejected');
+            onApprove={() => handleStatusUpdate(row.id, "Approved")}
+            onReject={(remark) => {
+              handleStatusUpdate(row.id, "Rejected");
               handleRemarkUpdate(row.id, remark);
             }}
           />
         </div>
       ),
     },
-    { key: "depositAmountINR", label: "Deposit Amount(INR)" },
+    // { key: "depositAmountINR", label: "Deposit Amount(INR)" },
     { key: "depositAmountUSD", label: "Deposit Amount(USD)" },
     {
       key: "status",
       label: "Status",
       render: (row) => (
         <div className="flex justify-center">
-                    <span
+          <span
             className={`px-2  py-[2px] rounded-full text-[11px] ${
               row.status === "Approved"
                 ? "bg-green-100 text-green-800"
@@ -165,7 +161,6 @@ const DepositHistory = () => {
           >
             {row.status}
           </span>
-
         </div>
       ),
     },
@@ -179,10 +174,12 @@ const DepositHistory = () => {
       key: "remark",
       label: "Remark",
       render: (row) => (
-        <span className={`text-sm ${
-          row.status === 'Rejected' ? 'text-red-600' : ''
-        }`}>
-          {row.status === 'Rejected' ? row.remark || '-' : '-'}
+        <span
+          className={`text-sm ${
+            row.status === "Rejected" ? "text-red-600" : ""
+          }`}
+        >
+          {row.status === "Rejected" ? row.remark || "-" : "-"}
         </span>
       ),
     },
@@ -266,7 +263,7 @@ const DepositHistory = () => {
         <main className="grow p-4 sm:p-6">
           <div className="max-w-full mx-auto">
             {/* Stats Cards */}
-            <div className="max-w-full sm:max-w-sm px-2 rounded-xl grid grid-cols-2 sm:grid-cols-4 mb-6 bg-white dark:bg-gray-800 shadow-lg">
+            <div className="max-w-full sm:max-w-sm px-2 rounded-xl grid grid-cols-4 mb-4 sm:mb-6 bg-white dark:bg-gray-800 shadow-lg">
               <StatsCard
                 title="Total"
                 value={stats.totalRequests}
@@ -293,10 +290,10 @@ const DepositHistory = () => {
               />
             </div>
 
-            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-4 py-6">
+            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-4 py-3 sm:py-6">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-[6px] sm:gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
                   Deposit History
                 </h2>
                 <div className="flex items-center gap-2">
@@ -355,13 +352,13 @@ const DepositHistory = () => {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg sm:p-4 mb-3 sm:mb-6">
                 {/*  Filter Section */}
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center justify-end">
                     <button
                       onClick={resetFilters}
-                      className="flex items-center gap-1 px-3 py-1 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors cursor-pointer"
+                      className="flex items-center gap-1 px-3 py-1 text-xs text-red-600 hover:text-rd-900 dark:text-red-600 dark:hover:text-red-100 transition-colors cursor-pointer"
                     >
                       <IoRemoveCircle className="w-4 h-4" />
                       Clear Filters
@@ -369,7 +366,7 @@ const DepositHistory = () => {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-2 w-full bg-gray-100 dark:bg-gray-900  rounded-lg shadow-sm p-3">
-                  {/* Date Filter */}
+                    {/* Date Filter */}
                     <div className="">
                       <div className="flex items-center gap-2 mb-1">
                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -377,33 +374,30 @@ const DepositHistory = () => {
                           Request Period
                         </span>
                       </div>
-                      
+
                       <DatePickerWithRange
                         date={dateRange}
                         onDateChange={setDateRange}
                       />
                     </div>
 
-
                     {/* Search */}
-                      <div className="flex flex-col justify-end">
-                        <div className="relative">
-                          <input
-                            type="text"
-                            placeholder="Search..."
-                            className="w-full px-4 py-2 text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                          />
-                          <Search className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-                        </div>
+                    <div className="flex flex-col justify-end">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="Search..."
+                          className="w-full px-4 py-2 text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <Search className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
                       </div>
+                    </div>
 
-                  
-                      {/*Status Filter */}
-                      <div className="flex flex-col justify-end">
-
-                    <select
+                    {/*Status Filter */}
+                    <div className="flex flex-col justify-end">
+                      <select
                         className=" px-4 py-2 text-xs sm:text-sm border rounded-lg focus:ring focus:ring-blue-500 bg-gray-50 border-gray-200 dark:bg-gray-700 dark:border-gray-600 cursor-pointer"
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
@@ -413,7 +407,7 @@ const DepositHistory = () => {
                         <option value="pending">Pending</option>
                         <option value="rejected">Rejected</option>
                       </select>
-                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

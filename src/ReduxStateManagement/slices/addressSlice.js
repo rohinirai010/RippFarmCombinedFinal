@@ -21,12 +21,16 @@ const addressSlice = createSlice({
   reducers: {
     addAddress: (state, action) => {
       const { type, address } = action.payload;
+
+       // Check if this address already exists
+  const existingAddress = state.addresses[type]?.address;
+  const existingChangeCount = state.addresses[type]?.changeCount || 0;
       
       state.addresses[type] = {
         address,
         isVerified: false,
         addedAt: new Date().toISOString(),
-        changeCount: (state.addresses[type]?.changeCount || 0) + 1
+        changeCount: existingAddress ? existingChangeCount + 1 : existingChangeCount
       };
       
       // Persist to localStorage

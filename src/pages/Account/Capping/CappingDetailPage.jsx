@@ -147,8 +147,8 @@ export default function CappingDetailPage() {
   });
 
   // package upgrade navigation
-  const handleUpgradePackage = (packageType) => {
-    navigate(`/user/package/${packageType}`);
+  const handleUpgradePackage = () => {
+    navigate(`/user/packages`);
   };
 
   const slideVariants = {
@@ -465,7 +465,7 @@ export default function CappingDetailPage() {
                 </p>
                 <button
                   className="bg-gray-100 text-red-700 text-xs sm:text-sm font-medium rounded-full px-6 py-2 cursor-pointer animate-pulse"
-                  onClick={() => handleUpgradePackage(pkg.type)}
+                  onClick={() => handleUpgradePackage()}
                 >
                   Upgrade Package
                 </button>

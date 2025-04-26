@@ -23,13 +23,14 @@ import Header from "../../../partials/AdminPartials/Header";
 import Sidebar from "../../../partials/AdminPartials/Sidebar";
 
 const StatsCard = ({ title, value, textColor = "text-black", icon: Icon }) => (
-  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg  flex flex-col items-center sm:items-start justify-center gap-1 transform transition-all duration-300">
-    <h3 className={`text-base font-medium text-center tracking-wide ${textColor}`}>
+  <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 rounded-xl shadow-lg  flex flex-col items-center sm:items-start justify-center gap-1 transform transition-all duration-300">
+    <h3 className={`text-sm sm:text-base font-medium text-center tracking-wide ${textColor}`}>
       {title}
     </h3>
-    <p className="text-2xl font-bold text-center">{value}</p>
+    <p className="text-lg sm:text-2xl font-bold text-center">{value}</p>
   </div>
 );
+
 
 const ExportButton = ({ label, bgColor, shadow, onClick }) => (
   <button
@@ -67,6 +68,7 @@ const WithdrawalHistory = () => {
     {
       id: 1,
       srNo: 1,
+      username: "john123",
       fullname: "John Doe",
       withdrawalMethod: "Bank Transfer",
       amount: "5000.00",
@@ -82,6 +84,7 @@ const WithdrawalHistory = () => {
     {
       id: 2,
       srNo: 2,
+      username: "jane123",
       fullname: "Jane Smith",
       withdrawalMethod: "USDT",
       amount: "10000.00",
@@ -116,12 +119,13 @@ const WithdrawalHistory = () => {
 
   const columns = [
     { key: "srNo", label: "Sr No" },
-    { key: "fullname", label: "Fullname" },
+    { key: "username", label: "Username" },
+    { key: "fullname", label: "Full Name" },
     { key: "withdrawalMethod", label: "Withdrawal Method" },
     { key: "amount", label: "Amount" },
     { key: "adminDeduction", label: "10% Admin Deduction" },
     { key: "withdrawalAmount", label: "Withdrawal Amount" },
-    { key: "accountDetails", label: "Account Details" },
+    { key: "accountDetails", label: "Withdrawal Address" },
     {
       key: "status",
       label: "Status",
@@ -356,10 +360,10 @@ const showTransactionDetails = (row) => {
         <main className="grow p-4 sm:p-6">
           <div className="max-w-full mx-auto">
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="max-w-full sm:max-w-sm px-2 rounded-xl grid grid-cols-2 mb-3  sm:mb-6 bg-white dark:bg-gray-800 shadow-lg">
 
                 <StatsCard
-                  title="Total Paid Withdrawals"
+                  title="Paid"
                   value={`$${stats.totalPaidAmount}`}
                   textColor="text-green-600"
                   icon={CheckCircle}
@@ -367,25 +371,25 @@ const showTransactionDetails = (row) => {
              
               
                 <StatsCard
-                  title="Total Pending Withdrawals"
+                  title="Pending"
                   value={`$${stats.totalPendingAmount}`}
                   textColor="text-yellow-600"
                   icon={Clock}
                 />
            
-                <StatsCard
+                {/* <StatsCard
                   title="Total Requests"
                   value={stats.totalRequests}
                   textColor="text-blue-600"
                   icon={Users}
-                />
+                /> */}
              
             </div>
 
-            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-4 py-6">
+            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg px-4 py-3 sm:py-6">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-[6px] sm:gap-2 sm:gap-0 border-b border-gray-200 dark:border-gray-700 pb-4">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
                   Withdrawal History
                 </h2>
                 <div className="flex items-center gap-2">
@@ -417,7 +421,7 @@ const showTransactionDetails = (row) => {
               </div>
 
               {/* Filters */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg sm:p-4 mb-3 sm:mb-6">
                 <div className="flex flex-col space-y-1">
                   <div className="flex items-center justify-end">
                     <button

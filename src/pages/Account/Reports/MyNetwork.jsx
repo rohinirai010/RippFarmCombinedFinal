@@ -437,7 +437,7 @@ const MyNetwork = () => {
             >
               <IoChevronBack className="text-xl text-blue-400" />
             </motion.button>
-            <h1 className="text-lg font-bold text-blue-100">Downline Summary</h1>
+            <h1 className="text-lg font-bold text-blue-100">Direct Team (My Network)</h1>
           </div>
           <div className="flex items-center space-x-2">
             <div className="flex items-center">
